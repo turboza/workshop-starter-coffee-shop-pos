@@ -1,4 +1,9 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Coffee Shop POS — Workshop Starter Template
+
+This is the template starter project for the **Build with Claude Code** course workshop.
+Course: [https://academy.scallops.cloud/build-with-claude-code](https://academy.scallops.cloud/build-with-claude-code)
+
+Built on [Next.js](https://nextjs.org), bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
