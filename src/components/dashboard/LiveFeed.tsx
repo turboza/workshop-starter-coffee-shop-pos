@@ -35,7 +35,7 @@ export function LiveFeed({ orders }: { orders: Order[] }) {
             >
               <div className="flex gap-4 min-w-0 flex-1">
                 <span className="text-sm shrink-0 w-10" style={{ color: 'var(--text-muted)' }}>
-                  {order.timestamp}
+                  {new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
                 <div className="min-w-0">
                   <p

@@ -13,6 +13,7 @@ export default function PaymentPage() {
   const [method, setMethod] = useState<'cash' | 'card'>('cash')
   const [received, setReceived] = useState<number | null>(null)
   const [phone, setPhone] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (items.length === 0) {
@@ -30,6 +31,8 @@ export default function PaymentPage() {
   const change = received !== null ? received - total : null
 
   async function handleConfirm() {
+    if (submitting) return
+    setSubmitting(true)
     completeOrder(method, method === 'cash' ? (received ?? total) : undefined)
 
     const cashReceived = method === 'cash' ? (received ?? total) : null
@@ -212,20 +215,20 @@ export default function PaymentPage() {
             <div className="mt-auto space-y-2">
               <button
                 onClick={handleConfirm}
-                disabled={received === null || change === null || change < 0}
+                disabled={submitting || received === null || change === null || change < 0}
                 className="w-full py-3.5 rounded-xl text-sm font-semibold text-white"
                 style={{
                   background:
-                    received !== null && change !== null && change >= 0
+                    !submitting && received !== null && change !== null && change >= 0
                       ? 'var(--accent)'
                       : 'var(--border)',
                   cursor:
-                    received !== null && change !== null && change >= 0
+                    !submitting && received !== null && change !== null && change >= 0
                       ? 'pointer'
                       : 'not-allowed',
                 }}
               >
-                Confirm — open drawer
+                {submitting ? 'Processing…' : 'Confirm — open drawer'}
               </button>
               <button
                 onClick={handleCancel}
@@ -249,10 +252,11 @@ export default function PaymentPage() {
             <div className="space-y-2">
               <button
                 onClick={handleConfirm}
+                disabled={submitting}
                 className="w-full py-3.5 rounded-xl text-sm font-semibold text-white"
-                style={{ background: 'var(--accent)' }}
+                style={{ background: submitting ? 'var(--border)' : 'var(--accent)', cursor: submitting ? 'not-allowed' : 'pointer' }}
               >
-                Confirm
+                {submitting ? 'Processing…' : 'Confirm'}
               </button>
               <button
                 onClick={handleCancel}
