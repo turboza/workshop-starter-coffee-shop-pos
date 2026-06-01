@@ -15,6 +15,12 @@ Live at: https://coffee-shop-pos-phi.vercel.app
 - **Supabase** — cloud Postgres database (`ialqovihedyaycazhwyh.supabase.co`)
 - No external UI library, no chart library
 
+## Communication style
+
+The user is non-technical. Always explain in plain, simple language — no jargon.
+Use Excel/finance analogies when helpful (e.g. "think of this like a spreadsheet tab").
+When something goes wrong, explain what happened and why in one plain sentence before fixing it.
+
 ## Key rules from AGENTS.md
 
 Read `node_modules/next/dist/docs/` before writing Next.js code. APIs changed.
