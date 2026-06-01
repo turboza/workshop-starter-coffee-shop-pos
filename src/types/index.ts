@@ -18,6 +18,7 @@ export interface Product {
   price: number
   soldOut?: boolean
   customizable?: boolean
+  image?: string
 }
 
 export interface CartItem {

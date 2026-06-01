@@ -1,7 +1,30 @@
 'use client'
 
+import { useState } from 'react'
+import Image from 'next/image'
 import { Product } from '@/src/types'
 import { ProductPlaceholder } from '@/src/components/ui/ProductPlaceholder'
+
+function ProductPhoto({ product }: { product: Product }) {
+  const [failed, setFailed] = useState(false)
+
+  if (!product.image || failed) {
+    return <ProductPlaceholder name={product.name} className="w-full aspect-[4/3]" />
+  }
+
+  return (
+    <div className="relative w-full aspect-[4/3]">
+      <Image
+        src={product.image}
+        alt={product.name}
+        fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+        className="object-cover"
+        onError={() => setFailed(true)}
+      />
+    </div>
+  )
+}
 
 interface ProductGridProps {
   products: Product[]
@@ -34,10 +57,7 @@ export function ProductGrid({ products, onSelect }: ProductGridProps) {
         >
           {/* Photo area */}
           <div className="relative">
-            <ProductPlaceholder
-              name={product.name}
-              className="w-full aspect-[4/3]"
-            />
+            <ProductPhoto product={product} />
             {product.soldOut && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <span

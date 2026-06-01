@@ -1,0 +1,124 @@
+{
+  "_meta": {
+    "purpose": "Source-of-truth prompts for menu product images. Edit subjects here, then regenerate via `codex exec` using the imagegen skill. Keep style + backdrop + constraints identical across items so the menu grid reads as one cohesive set.",
+    "generator": "codex exec --sandbox workspace-write --skip-git-repo-check '<prompt>' (uses built-in image_gen via ~/.codex/skills/.system/imagegen/SKILL.md)",
+    "output": "public/menu/<id>.jpg — square 1024x1024 JPEG quality ~85",
+    "model_notes": "gpt-image-2 via codex built-in image_gen tool"
+  },
+  "shared": {
+    "style": "Photorealistic overhead 3/4 product photography, bright airy soft natural daylight, shallow depth of field, high-key exposure.",
+    "backdrop": "A VERY PALE, almost whitewashed light-oak wood surface — bleached blonde wood, near off-white, low-contrast grain. Imagine a sun-bleached Scandinavian cafe table, NOT a warm honey or medium-oak tone. The wood should read as cream/ivory in the final image. A soft out-of-focus leaf shadow in the upper-left corner, gentle and low-contrast.",
+    "composition": "Subject centered with comfortable padding, square 1024x1024.",
+    "constraints": "No logos, no text, no watermark, no hands, no extra props beyond what is specified. Background must be light and airy, NOT warm orange or honey-toned wood."
+  },
+  "items": {
+    "latte": {
+      "name": "Latte",
+      "subject": "a hot latte in a small off-white ceramic cup (no saucer), warm espresso-tinted milk with a delicate white milk foam latte-art rosetta on top, cup resting directly on the wood backdrop."
+    },
+    "iced-latte": {
+      "name": "Iced Latte",
+      "subject": "an iced latte in a tall clear straight-sided glass with visible ice cubes, dark espresso swirling into milk, fine condensation on the glass. No straw, no saucer."
+    },
+    "americano": {
+      "name": "Americano",
+      "subject": "a hot americano in a small off-white ceramic cup (no saucer), deep dark coffee with a thin natural crema ring on top, cup resting directly on the wood backdrop."
+    },
+    "iced-americano": {
+      "name": "Iced Americano",
+      "subject": "an iced americano in a tall clear straight-sided glass with visible ice cubes, deep dark coffee, fine condensation on the glass. No milk, no straw."
+    },
+    "cappuccino": {
+      "name": "Cappuccino",
+      "subject": "a hot cappuccino in a small off-white ceramic cup (no saucer), generous thick foam dome dusted with fine cocoa powder, cup resting directly on the wood backdrop."
+    },
+    "mocha": {
+      "name": "Mocha",
+      "subject": "a hot mocha in a small off-white ceramic cup (no saucer), espresso and chocolate with milk foam, a few cocoa shavings on top, cup resting directly on the wood backdrop."
+    },
+    "espresso": {
+      "name": "Espresso",
+      "subject": "a single espresso shot in a small white ceramic demitasse cup (no saucer), rich dark coffee with a hazel crema, cup resting directly on the wood backdrop."
+    },
+    "flat-white": {
+      "name": "Flat White",
+      "subject": "a hot flat white in a small off-white ceramic cup (no saucer), velvety microfoam with a clean tulip latte-art pattern, cup resting directly on the wood backdrop."
+    },
+    "sig-latte": {
+      "name": "Signature Latte",
+      "subject": "a signature specialty latte in a small off-white ceramic cup (no saucer), warm caramel-toned milk with intricate elaborate latte-art (multi-leaf rosetta or swan), a faint drizzle of caramel on the foam, cup resting directly on the wood backdrop."
+    },
+    "matcha-latte": {
+      "name": "Matcha Latte",
+      "subject": "a hot matcha latte in a small off-white ceramic cup (no saucer), vivid bright-green matcha with delicate white milk foam latte-art leaf pattern on top, cup resting directly on the wood backdrop."
+    },
+    "thai-tea": {
+      "name": "Thai Iced Tea",
+      "subject": "a Thai iced tea in a tall clear straight-sided glass with visible ice cubes, the bottom layer a vivid orange tea and the top a layer of poured white evaporated milk creating a clean two-tone gradient, fine condensation on the glass. No straw."
+    },
+    "chamomile": {
+      "name": "Chamomile",
+      "subject": "a chamomile tea in a small clear glass cup (no saucer), pale golden infusion with a few small chamomile flower buds floating on the surface, cup resting directly on the wood backdrop."
+    },
+    "earl-grey": {
+      "name": "Earl Grey",
+      "subject": "an earl grey tea in a small off-white ceramic cup (no saucer), deep amber-brown tea with a subtle natural sheen, cup resting directly on the wood backdrop."
+    },
+    "green-tea": {
+      "name": "Green Tea",
+      "subject": "a green tea in a small off-white ceramic cup (no saucer), pale yellow-green infusion with a clean clear surface, cup resting directly on the wood backdrop."
+    },
+    "oolong": {
+      "name": "Oolong",
+      "subject": "an oolong tea in a small off-white ceramic cup (no saucer), warm amber-gold tea with a faint natural sheen, cup resting directly on the wood backdrop."
+    },
+    "croissant": {
+      "name": "Croissant",
+      "subject": "a fresh golden-brown butter croissant with visibly flaky shiny layers and a few crumbs, resting directly on the wood backdrop (no plate, no parchment)."
+    },
+    "pain-au-choc": {
+      "name": "Pain au choc",
+      "subject": "a fresh golden-brown pain au chocolat (rectangular flaky pastry) with two slim batons of dark chocolate visible at the ends, a few crumbs, resting directly on the wood backdrop (no plate, no parchment)."
+    },
+    "banana-bread": {
+      "name": "Banana Bread",
+      "subject": "a single thick slice of homemade banana bread with a golden-brown crust and visible moist crumb, a few small crumbs scattered, resting directly on the wood backdrop (no plate, no parchment)."
+    },
+    "almond-danish": {
+      "name": "Almond Danish",
+      "subject": "a single almond danish pastry with a flaky pinwheel or oval shape, glossy glaze, topped with sliced almonds and a light dusting of powdered sugar, resting directly on the wood backdrop (no plate, no parchment)."
+    },
+    "muffin": {
+      "name": "Blueberry Muffin",
+      "subject": "a single homemade blueberry muffin in a natural-colored paper liner, golden-brown crusty top with visible whole blueberries peeking through, resting directly on the wood backdrop."
+    },
+    "fresh-orange": {
+      "name": "Fresh Orange",
+      "subject": "a freshly squeezed orange juice in a tall clear straight-sided glass, bright vivid orange juice with fine pulp visible, no ice, no garnish. A small thin orange slice on the rim of the glass."
+    },
+    "sparkling": {
+      "name": "Sparkling Water",
+      "subject": "sparkling water in a tall clear straight-sided glass, crystal-clear water full of fine rising bubbles, fine condensation on the glass. No ice, no garnish."
+    },
+    "cold-brew": {
+      "name": "Cold Brew",
+      "subject": "a cold brew coffee in a tall clear straight-sided glass with visible large ice cubes, deep dark coffee (no milk), fine condensation on the glass. No straw."
+    },
+    "smoothie": {
+      "name": "Berry Smoothie",
+      "subject": "a berry smoothie in a tall clear straight-sided glass, thick deep-purple-pink smoothie with a few whole blueberries and a raspberry resting on top. No straw, no whipped cream."
+    },
+    "affogato": {
+      "name": "Affogato",
+      "subject": "an affogato in a small clear glass cup (no saucer), a generous scoop of creamy vanilla gelato with a fresh shot of dark espresso being poured over creating melt streaks down the side of the scoop, glass resting directly on the wood backdrop."
+    },
+    "dirty-matcha": {
+      "name": "Dirty Matcha",
+      "subject": "a dirty matcha latte in a tall clear straight-sided glass with visible ice cubes, a clean two-tone layer with vivid bright-green matcha milk on the bottom and a dark espresso 'dirty' pour creating dark swirls on top, fine condensation on the glass. No straw."
+    },
+    "honey-latte": {
+      "name": "Honey Oat Latte",
+      "subject": "a honey oat latte in a small off-white ceramic cup (no saucer), warm honey-toned oat milk coffee with a delicate latte-art heart, a thin amber drizzle of honey on the foam, cup resting directly on the wood backdrop."
+    }
+  }
+}
