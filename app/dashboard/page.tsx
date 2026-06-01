@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from 'next/link'
 import { Badge } from '@/src/components/ui/Badge'
 import { StatCard } from '@/src/components/dashboard/StatCard'
