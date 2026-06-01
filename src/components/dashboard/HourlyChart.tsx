@@ -1,8 +1,18 @@
 'use client'
 
-type HourlyData = { hour: number; revenue: number }
+type RawOrder = { total: number; createdAt: string }
 
-export function HourlyChart({ hourlyRevenue }: { hourlyRevenue: HourlyData[] }) {
+export function HourlyChart({ orders }: { orders: RawOrder[] }) {
+  // Bucket by local hour using the browser's timezone
+  const hourlyMap = new Map<number, number>()
+  for (let h = 7; h <= 20; h++) hourlyMap.set(h, 0)
+  for (const order of orders) {
+    const hour = new Date(order.createdAt).getHours()
+    if (hourlyMap.has(hour)) {
+      hourlyMap.set(hour, (hourlyMap.get(hour) ?? 0) + order.total)
+    }
+  }
+  const hourlyRevenue = Array.from(hourlyMap, ([hour, revenue]) => ({ hour, revenue }))
   const max = Math.max(...hourlyRevenue.map((h) => h.revenue), 1)
 
   return (

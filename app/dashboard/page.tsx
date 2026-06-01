@@ -2,17 +2,15 @@ export const dynamic = 'force-dynamic'
 
 import Link from 'next/link'
 import { Badge } from '@/src/components/ui/Badge'
-import { StatCard } from '@/src/components/dashboard/StatCard'
-import { HourlyChart } from '@/src/components/dashboard/HourlyChart'
 import { TopProducts } from '@/src/components/dashboard/TopProducts'
 import { LiveFeed } from '@/src/components/dashboard/LiveFeed'
-import { todayStats } from '@/src/data/stats'
+import { DashboardLive } from '@/src/components/dashboard/DashboardLive'
 import { supabase } from '@/src/lib/supabase'
 import { Order } from '@/src/types'
 
 async function fetchTodayOrders(): Promise<Order[]> {
-  const todayStart = new Date()
-  todayStart.setHours(0, 0, 0, 0)
+  // Fetch last 48h — the client filters to "today" using browser local time
+  const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000)
 
   const { data, error } = await supabase
     .from('orders')
@@ -36,7 +34,7 @@ async function fetchTodayOrders(): Promise<Order[]> {
         note
       )
     `)
-    .gte('created_at', todayStart.toISOString())
+    .gte('created_at', cutoff.toISOString())
     .order('created_at', { ascending: false })
 
   if (error || !data) {
@@ -53,10 +51,7 @@ async function fetchTodayOrders(): Promise<Order[]> {
     subtotal: row.subtotal,
     vat: row.vat,
     total: row.total,
-    timestamp: new Date(row.created_at).toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
+    timestamp: row.created_at,
     voided: false,
     items: (row.order_items ?? []).map((item: {
       product_name: string
@@ -89,20 +84,8 @@ async function fetchTodayOrders(): Promise<Order[]> {
 export default async function DashboardPage() {
   const orders = await fetchTodayOrders()
 
-  const nonVoided = orders.filter((o) => !o.voided)
-  const realRevenue = nonVoided.reduce((sum, o) => sum + o.total, 0)
-  const realTransactions = nonVoided.length
-
-  // Build hourly revenue from today's fetched orders (7am–8pm)
-  const hourlyMap = new Map<number, number>()
-  for (let h = 7; h <= 20; h++) hourlyMap.set(h, 0)
-  for (const order of nonVoided) {
-    const hour = parseInt(order.timestamp.split(':')[0], 10)
-    if (hourlyMap.has(hour)) {
-      hourlyMap.set(hour, (hourlyMap.get(hour) ?? 0) + order.total)
-    }
-  }
-  const hourlyRevenue = Array.from(hourlyMap, ([hour, revenue]) => ({ hour, revenue }))
+  // Pass raw ISO timestamps to client — revenue/count/hourly computed there using browser timezone
+  const rawOrders = orders.map((o) => ({ total: o.total, createdAt: o.timestamp }))
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
@@ -179,36 +162,8 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Stat cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          <StatCard
-            label="Revenue · Today"
-            value={`฿${realRevenue.toLocaleString()}`}
-            sub={realTransactions > 0 ? `${realTransactions} orders` : 'No orders yet'}
-            subPositive={realTransactions > 0}
-          />
-          <StatCard
-            label="Transactions"
-            value={`${realTransactions}`}
-            sub={realTransactions > 0 ? 'orders today' : 'No orders yet'}
-          />
-          <StatCard
-            label="Avg Ticket"
-            value={`฿${todayStats.avgTicket}`}
-            sub={todayStats.avgTicketChange}
-            subPositive={true}
-            sample
-          />
-          <StatCard
-            label="Voids Today"
-            value={`${todayStats.voids}`}
-            sub={todayStats.voidsNote}
-            sample
-          />
-        </div>
-
-        {/* Hourly chart */}
-        <HourlyChart hourlyRevenue={hourlyRevenue} />
+        {/* Stat cards + hourly chart — rendered client-side for correct local timezone */}
+        <DashboardLive rawOrders={rawOrders} />
 
         {/* Top products */}
         <TopProducts />
