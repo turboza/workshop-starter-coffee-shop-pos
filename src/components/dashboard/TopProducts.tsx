@@ -22,9 +22,17 @@ export function TopProducts() {
       style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-display font-bold text-xl" style={{ color: 'var(--text)' }}>
-          Top products
-        </h3>
+        <div className="flex items-center gap-2">
+          <h3 className="font-display font-bold text-xl" style={{ color: 'var(--text)' }}>
+            Top products
+          </h3>
+          <span
+            className="text-xs px-1.5 py-0.5 rounded font-medium"
+            style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)' }}
+          >
+            sample
+          </span>
+        </div>
         <div className="flex gap-1 rounded-lg overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
           {(['TODAY', 'WEEK', 'MONTH'] as Period[]).map((p) => (
             <button

@@ -1,9 +1,9 @@
 'use client'
 
-import { hourlyRevenue } from '@/src/data/stats'
+type HourlyData = { hour: number; revenue: number }
 
-export function HourlyChart() {
-  const max = Math.max(...hourlyRevenue.map((h) => h.revenue))
+export function HourlyChart({ hourlyRevenue }: { hourlyRevenue: HourlyData[] }) {
+  const max = Math.max(...hourlyRevenue.map((h) => h.revenue), 1)
 
   return (
     <div

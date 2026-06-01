@@ -1,7 +1,7 @@
 import { Badge } from '@/src/components/ui/Badge'
-import { sampleOrders } from '@/src/data/sampleOrders'
+import { Order } from '@/src/types'
 
-export function LiveFeed() {
+export function LiveFeed({ orders }: { orders: Order[] }) {
   return (
     <div
       className="rounded-xl p-5"
@@ -15,7 +15,7 @@ export function LiveFeed() {
       </div>
 
       <div className="space-y-0">
-        {sampleOrders.map((order, i) => {
+        {orders.map((order, i) => {
           const itemSummary = order.items
             .map((item) => {
               const opts: string[] = []
@@ -30,7 +30,7 @@ export function LiveFeed() {
               key={order.id}
               className="flex items-start justify-between py-3 gap-3"
               style={{
-                borderBottom: i < sampleOrders.length - 1 ? '1px solid var(--border-light)' : 'none',
+                borderBottom: i < orders.length - 1 ? '1px solid var(--border-light)' : 'none',
               }}
             >
               <div className="flex gap-4 min-w-0 flex-1">

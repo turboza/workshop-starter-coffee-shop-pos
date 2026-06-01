@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/src/context/CartContext'
+import { supabase } from '@/src/lib/supabase'
 
 const QUICK_CASH = [100, 200, 300, 500, 1000]
 
 export default function PaymentPage() {
   const router = useRouter()
-  const { items, total, orderNumber, cashier, completeOrder } = useCart()
+  const { items, total, subtotal, vat, orderNumber, cashier, completeOrder } = useCart()
   const [method, setMethod] = useState<'cash' | 'card'>('cash')
   const [received, setReceived] = useState<number | null>(null)
   const [phone, setPhone] = useState('')
@@ -28,8 +29,48 @@ export default function PaymentPage() {
 
   const change = received !== null ? received - total : null
 
-  function handleConfirm() {
+  async function handleConfirm() {
     completeOrder(method, method === 'cash' ? (received ?? total) : undefined)
+
+    const cashReceived = method === 'cash' ? (received ?? total) : null
+    const changeAmount = cashReceived !== null ? cashReceived - total : null
+
+    const { data: savedOrder, error: orderError } = await supabase
+      .from('orders')
+      .insert({
+        cashier,
+        payment_method: method,
+        cash_received: cashReceived,
+        change: changeAmount,
+        subtotal,
+        vat,
+        total,
+      })
+      .select('id')
+      .single()
+
+    if (orderError || !savedOrder) {
+      console.error('Failed to save order:', orderError)
+      router.push('/receipt')
+      return
+    }
+
+    const lineItems = items.map((item) => ({
+      order_id: savedOrder.id,
+      product_name: item.product.name,
+      unit_price: item.unitPrice,
+      quantity: item.quantity,
+      size: item.options.size ?? null,
+      milk: item.options.milk ?? null,
+      extras: item.options.extras ?? null,
+      note: item.options.note ?? null,
+    }))
+
+    const { error: itemsError } = await supabase.from('order_items').insert(lineItems)
+    if (itemsError) {
+      console.error('Failed to save order items:', itemsError)
+    }
+
     router.push('/receipt')
   }
 
