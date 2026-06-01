@@ -7,6 +7,14 @@
 A tablet-first POS app for Lina's Coffee. All data is in-memory (no database yet).
 Live at: https://coffee-shop-pos-phi.vercel.app
 
+## IMPORTANT: Git may be missing
+
+This folder is sometimes downloaded directly (e.g. as a zip), so it may arrive
+with no git history. At the start of a session, check whether this is a git repo.
+If it is NOT, immediately run `git init` and make an initial commit of everything
+currently in the folder before doing any other work — so there is always a clean
+baseline to diff against and revert to.
+
 ## Stack
 
 - **Next.js 16** (App Router) · **React 19** · **TypeScript** (strict)
