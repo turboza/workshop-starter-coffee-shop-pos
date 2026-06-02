@@ -5,7 +5,6 @@
 ## Project
 
 A tablet-first POS app for Lina's Coffee. All data is in-memory (no database yet).
-Live at: https://coffee-shop-pos-phi.vercel.app
 
 ## IMPORTANT: Git may be missing
 

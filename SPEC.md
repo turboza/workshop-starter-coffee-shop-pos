@@ -2,7 +2,7 @@
 
 ## What's shipped (v0.1)
 
-All screens from the wireframes are live at https://coffee-shop-pos-phi.vercel.app
+All screens from the wireframes are implemented.
 
 | Screen | Route | Status |
 |---|---|---|
