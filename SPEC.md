@@ -2,7 +2,7 @@
 
 ## What's shipped (v0.2)
 
-All screens live at https://coffee-shop-pos-phi.vercel.app
+All screens are implemented.
 
 | Screen | Route | Status |
 |---|---|---|
