@@ -5,7 +5,6 @@
 ## Project
 
 A tablet-first POS app for Lina's Coffee. Orders saved to Supabase; dashboard reads real data.
-Live at: https://coffee-shop-pos-phi.vercel.app
 
 ## Stack
 
