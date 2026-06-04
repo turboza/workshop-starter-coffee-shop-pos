@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCart } from '@/src/context/CartContext'
-import { supabase } from '@/src/lib/supabase'
+import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
 
 const QUICK_CASH = [100, 200, 300, 500, 1000]
 
@@ -37,6 +37,7 @@ export default function PaymentPage() {
 
     const cashReceived = method === 'cash' ? (received ?? total) : null
     const changeAmount = cashReceived !== null ? cashReceived - total : null
+    const supabase = createSupabaseBrowserClient()
 
     const { data: savedOrder, error: orderError } = await supabase
       .from('orders')
@@ -70,6 +71,7 @@ export default function PaymentPage() {
     }))
 
     const { error: itemsError } = await supabase.from('order_items').insert(lineItems)
+
     if (itemsError) {
       console.error('Failed to save order items:', itemsError)
     }

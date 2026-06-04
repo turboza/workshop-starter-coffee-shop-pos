@@ -27,7 +27,6 @@ All screens are implemented.
 - Print / Email / SMS buttons show a toast "Not connected yet"
 - Products have colored letter placeholders, no real photos
 - Single hardcoded cashier "Aey", order numbers start at 1284
-- No authentication — anyone can access any screen
 
 ---
 
@@ -84,17 +83,18 @@ Plan:
 
 ---
 
-## Phase 4 — Auth & multi-staff
+## Phase 4 — Auth & multi-staff ✅ DONE (partial)
 
-| Feature | Notes |
-|---|---|
-| Login screen | Supabase Auth, email or phone |
-| Role: staff | Can access Till + Payment + Receipt only |
-| Role: owner | Can access all screens including Dashboard |
-| Cashier name | Pull from auth session instead of hardcoded "Aey" |
-| Per-staff sales | Filter dashboard live feed by cashier |
-
-**Security note:** Current RLS policies on `orders` and `order_items` are open (anon read/write). Tighten these when auth is added — replace `to anon` with `to authenticated` and add ownership predicates.
+| Feature | Notes | Status |
+|---|---|---|
+| Login screen | Email + password, sign up + sign in on `/login` | ✅ Done |
+| Route protection | All routes require login; proxy.ts redirects unauthenticated visitors | ✅ Done |
+| Logout | Dashboard sidebar + Till account menu (top-right avatar icon) | ✅ Done |
+| RLS tightened | `orders` and `order_items` now require `authenticated` role | ✅ Done |
+| Role: staff | Can access Till + Payment + Receipt only | Deferred |
+| Role: owner | Can access all screens including Dashboard | Deferred |
+| Cashier name | Pull from auth session instead of hardcoded "Aey" | Deferred |
+| Per-staff sales | Filter dashboard live feed by cashier | Deferred |
 
 ---
 

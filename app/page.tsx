@@ -9,6 +9,7 @@ import { ProductGrid } from '@/src/components/till/ProductGrid'
 import { CartPanel } from '@/src/components/till/CartPanel'
 import { CustomizeModal } from '@/src/components/till/CustomizeModal'
 import { useCart } from '@/src/context/CartContext'
+import { AccountMenu } from '@/src/components/ui/AccountMenu'
 
 export default function TillPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Coffee')
@@ -43,6 +44,7 @@ export default function TillPage() {
           >
             Dashboard
           </Link>
+          <AccountMenu />
         </div>
       </header>
 

@@ -6,10 +6,12 @@ import { TopProducts } from '@/src/components/dashboard/TopProducts'
 import { LiveFeed } from '@/src/components/dashboard/LiveFeed'
 import { DashboardLive } from '@/src/components/dashboard/DashboardLive'
 import { DashboardHeader } from '@/src/components/dashboard/DashboardHeader'
-import { supabase } from '@/src/lib/supabase'
+import { createSupabaseServerClient } from '@/src/lib/supabase-server'
+import { LogoutButton } from '@/src/components/ui/LogoutButton'
 import { Order } from '@/src/types'
 
 async function fetchTodayOrders(): Promise<Order[]> {
+  const supabase = await createSupabaseServerClient()
   // Fetch last 48h — the client filters to "today" using browser local time
   const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000)
 
@@ -113,7 +115,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Nav */}
-        <nav>
+        <nav className="flex-1">
           <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--text-faint)' }}>
             Operate
           </p>
@@ -146,6 +148,12 @@ export default async function DashboardPage() {
             </li>
           </ul>
         </nav>
+
+        {/* Logout */}
+        <LogoutButton
+          className="flex items-center px-3 py-2 rounded-lg text-sm w-full text-left"
+          style={{ color: 'var(--text-muted)' }}
+        />
       </aside>
 
       {/* Main content */}
