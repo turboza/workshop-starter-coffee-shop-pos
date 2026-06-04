@@ -2,7 +2,6 @@
 
 import { StatCard } from './StatCard'
 import { HourlyChart } from './HourlyChart'
-import { todayStats } from '@/src/data/stats'
 
 type RawOrder = { total: number; createdAt: string }
 
@@ -20,6 +19,7 @@ export function DashboardLive({ rawOrders }: { rawOrders: RawOrder[] }) {
   const todayOrders = rawOrders.filter((o) => isToday(o.createdAt))
   const realRevenue = todayOrders.reduce((sum, o) => sum + o.total, 0)
   const realTransactions = todayOrders.length
+  const avgTicket = realTransactions > 0 ? Math.round(realRevenue / realTransactions) : 0
 
   return (
     <>
@@ -38,15 +38,14 @@ export function DashboardLive({ rawOrders }: { rawOrders: RawOrder[] }) {
         />
         <StatCard
           label="Avg Ticket"
-          value={`฿${todayStats.avgTicket}`}
-          sub={todayStats.avgTicketChange}
-          subPositive={true}
-          sample
+          value={realTransactions > 0 ? `฿${avgTicket.toLocaleString()}` : '—'}
+          sub={realTransactions > 0 ? 'per order today' : 'No orders yet'}
+          subPositive={realTransactions > 0}
         />
         <StatCard
           label="Voids Today"
-          value={`${todayStats.voids}`}
-          sub={todayStats.voidsNote}
+          value="0"
+          sub="coming soon"
           sample
         />
       </div>

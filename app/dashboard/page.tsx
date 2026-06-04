@@ -5,6 +5,7 @@ import { Badge } from '@/src/components/ui/Badge'
 import { TopProducts } from '@/src/components/dashboard/TopProducts'
 import { LiveFeed } from '@/src/components/dashboard/LiveFeed'
 import { DashboardLive } from '@/src/components/dashboard/DashboardLive'
+import { DashboardHeader } from '@/src/components/dashboard/DashboardHeader'
 import { supabase } from '@/src/lib/supabase'
 import { Order } from '@/src/types'
 
@@ -87,6 +88,15 @@ export default async function DashboardPage() {
   // Pass raw ISO timestamps to client — revenue/count/hourly computed there using browser timezone
   const rawOrders = orders.map((o) => ({ total: o.total, createdAt: o.timestamp }))
 
+  // Flatten all order items with their order timestamp so TopProducts can filter by "today" in browser timezone
+  const rawItems = orders.flatMap((o) =>
+    o.items.map((item) => ({
+      productName: item.product.name,
+      quantity: item.quantity,
+      createdAt: o.timestamp,
+    }))
+  )
+
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
       {/* Sidebar */}
@@ -142,14 +152,7 @@ export default async function DashboardPage() {
       <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-5">
         {/* Header */}
         <div className="flex items-start justify-between">
-          <div>
-            <h2 className="font-display font-bold text-3xl" style={{ color: 'var(--text)' }}>
-              Good morning, Lina
-            </h2>
-            <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
-              Tue 11 May · 07:38
-            </p>
-          </div>
+          <DashboardHeader />
           <div className="flex items-center gap-2">
             <Badge variant="live" />
             <Link
@@ -166,7 +169,7 @@ export default async function DashboardPage() {
         <DashboardLive rawOrders={rawOrders} />
 
         {/* Top products */}
-        <TopProducts />
+        <TopProducts rawItems={rawItems} />
 
         {/* Live feed */}
         <LiveFeed orders={orders} />
