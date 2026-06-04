@@ -39,10 +39,13 @@ export default function PaymentPage() {
     const changeAmount = cashReceived !== null ? cashReceived - total : null
     const supabase = createSupabaseBrowserClient()
 
+    const { data: userData } = await supabase.auth.getUser()
+    const resolvedCashier = userData?.user?.user_metadata?.name ?? cashier
+
     const { data: savedOrder, error: orderError } = await supabase
       .from('orders')
       .insert({
-        cashier,
+        cashier: resolvedCashier,
         payment_method: method,
         cash_received: cashReceived,
         change: changeAmount,

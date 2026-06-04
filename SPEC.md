@@ -24,7 +24,7 @@ All screens are implemented.
 **Permanent limitations (by design):**
 - Print / Email / SMS buttons show a toast "Not connected yet"
 - Products have colored letter placeholders, no real photos
-- Single hardcoded cashier "Aey", order numbers start at 1284
+- Order numbers start at 1284 (CartContext counter, diverges from Supabase serial ID)
 
 ---
 
@@ -89,7 +89,7 @@ Plan:
 | RLS tightened | `orders` and `order_items` now require `authenticated` role | ✅ Done |
 | Role: staff | Can access Till + Payment + Receipt only | Deferred |
 | Role: owner | Can access all screens including Dashboard | Deferred |
-| Cashier name | Pull from auth session instead of hardcoded "Aey" | Deferred |
+| Cashier name | Pull from auth session instead of hardcoded "Aey" | ✅ Done |
 | Per-staff sales | Filter dashboard live feed by cashier | Deferred |
 
 ---

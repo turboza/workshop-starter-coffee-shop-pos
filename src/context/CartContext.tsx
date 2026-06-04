@@ -1,7 +1,8 @@
 'use client'
 
-import { createContext, useContext, useReducer, ReactNode } from 'react'
+import { createContext, useContext, useReducer, useEffect, useState, ReactNode } from 'react'
 import { CartItem, Order, PaymentMethod } from '@/src/types'
+import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
 
 interface CartState {
   items: CartItem[]
@@ -80,10 +81,20 @@ interface CartContextValue {
 const CartContext = createContext<CartContextValue | null>(null)
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const [cashierName, setCashierName] = useState('Staff')
+
+  useEffect(() => {
+    const supabase = createSupabaseBrowserClient()
+    supabase.auth.getUser().then(({ data }) => {
+      const name = data.user?.user_metadata?.name
+      if (name) setCashierName(name)
+    })
+  }, [])
+
   const [state, dispatch] = useReducer(cartReducer, {
     items: [],
     orderNumber: 1284,
-    cashier: 'Aey',
+    cashier: '',
     completedOrder: null,
   })
 
@@ -117,7 +128,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       paymentMethod,
       cashReceived,
       change: cashReceived ? cashReceived - total : undefined,
-      cashier: state.cashier,
+      cashier: cashierName,
       timestamp: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
       voided: false,
     }
@@ -129,7 +140,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       value={{
         items: state.items,
         orderNumber: state.orderNumber,
-        cashier: state.cashier,
+        cashier: cashierName,
         completedOrder: state.completedOrder,
         subtotal: sub,
         vat,

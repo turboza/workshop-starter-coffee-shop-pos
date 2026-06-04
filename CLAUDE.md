@@ -114,6 +114,9 @@ VAT is 7%, already included in the displayed total (not added on top).
 - To apply new migrations: `supabase migration new <name>` → edit SQL → `supabase db push`
 - RLS is enabled on all tables. Policies now require `authenticated` role — open `anon` policies were replaced in migration `20260604064712_tighten_rls_require_auth.sql`
 
+**Cashier name from auth session**
+CartContext reads the user's name from `supabase.auth.getUser()` on mount, but the payment page saves the order before that resolves. Always call `supabase.auth.getUser()` fresh inside `handleConfirm()` and use `user.user_metadata.name` directly — don't rely on state that was loaded asynchronously at mount time. The name is stored in `user_metadata.name` set at signup via `options: { data: { name } }`.
+
 ## Lessons learned this session
 
 **Next.js static vs dynamic rendering**
@@ -138,5 +141,4 @@ The plain `createClient` from `supabase-js` does not read cookies, so the server
 
 See SPEC.md for the full feature roadmap. Next priorities:
 1. Add `voided` column to `orders` + void workflow (completes Voids Today stat card)
-2. Pull cashier name from auth session instead of hardcoded "Aey" (quick win from Phase 4)
-3. Move products to Supabase (Phase 2) — rewires Till screen
+2. Move products to Supabase (Phase 2) — rewires Till screen
