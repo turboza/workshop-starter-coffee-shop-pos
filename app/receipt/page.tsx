@@ -10,6 +10,11 @@ export default function ReceiptPage() {
   const [countdown, setCountdown] = useState(5)
   const [toast, setToast] = useState<string | null>(null)
 
+  function handleNewOrder() {
+    clearCart()
+    router.push('/')
+  }
+
   useEffect(() => {
     if (!completedOrder) {
       router.push('/')
@@ -19,19 +24,19 @@ export default function ReceiptPage() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer)
-          handleNewOrder()
           return 0
         }
         return prev - 1
       })
     }, 1000)
     return () => clearInterval(timer)
-  }, [completedOrder])
+  }, [])
 
-  function handleNewOrder() {
-    clearCart()
-    router.push('/')
-  }
+  useEffect(() => {
+    if (countdown === 0 && completedOrder) {
+      handleNewOrder()
+    }
+  }, [countdown])
 
   function showToast(msg: string) {
     setToast(msg)

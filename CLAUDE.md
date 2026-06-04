@@ -117,6 +117,9 @@ VAT is 7%, already included in the displayed total (not added on top).
 **Cashier name from auth session**
 CartContext reads the user's name from `supabase.auth.getUser()` on mount, but the payment page saves the order before that resolves. Always call `supabase.auth.getUser()` fresh inside `handleConfirm()` and use `user.user_metadata.name` directly — don't rely on state that was loaded asynchronously at mount time. The name is stored in `user_metadata.name` set at signup via `options: { data: { name } }`.
 
+**React: no state updates during render / stale closures in useEffect**
+Never call a function that triggers state in another component from inside a `useEffect` callback that runs mid-render cycle. Also: functions used inside `useEffect` must be defined *before* the effect, not after — otherwise the closure captures an undefined reference. Fix pattern: define the handler first, split the effect into two — one for the timer (runs once on mount), one that watches a counter value and fires the action when it hits zero. This avoids both the stale closure and the "update during render" warning.
+
 ## Lessons learned this session
 
 **Next.js static vs dynamic rendering**
