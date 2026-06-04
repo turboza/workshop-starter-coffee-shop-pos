@@ -19,9 +19,7 @@ All screens are implemented.
 - Hourly Revenue chart uses real data (timezone-aware, uses browser local time)
 
 **Still sample/fake data (marked with "sample" badge on dashboard):**
-- Avg Ticket stat card
 - Voids Today stat card
-- Top Products panel (Today / Week / Month)
 
 **Permanent limitations (by design):**
 - Print / Email / SMS buttons show a toast "Not connected yet"
@@ -65,8 +63,6 @@ note         text  -- nullable
 ### What's still deferred from Phase 2
 
 - **Products table** — menu still lives in `src/data/products.ts` (code). Moving it to Supabase requires rewriting the Till screen's product loading — risky, saved for a dedicated session.
-- **Top Products (real data)** — needs aggregation query on `order_items` grouped by `product_name`.
-- **Avg Ticket stat card** — easy once above is done.
 - **Voids Today stat card** — needs `voided` column added to `orders` + void workflow.
 - **Sync order number** — CartContext order# (starts at 1284) and Supabase serial ID diverge. Decide whether to align them.
 

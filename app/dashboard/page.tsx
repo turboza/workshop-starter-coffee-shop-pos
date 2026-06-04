@@ -10,6 +10,29 @@ import { createSupabaseServerClient } from '@/src/lib/supabase-server'
 import { LogoutButton } from '@/src/components/ui/LogoutButton'
 import { Order } from '@/src/types'
 
+type RawItem = { productName: string; quantity: number; createdAt: string }
+
+async function fetchMonthItems(): Promise<RawItem[]> {
+  const supabase = await createSupabaseServerClient()
+  const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+
+  const { data, error } = await supabase
+    .from('order_items')
+    .select('product_name, quantity, orders!inner(created_at)')
+    .gte('orders.created_at', cutoff.toISOString())
+
+  if (error || !data) {
+    console.error('Failed to fetch month items:', error)
+    return []
+  }
+
+  return data.map((row) => ({
+    productName: row.product_name,
+    quantity: row.quantity,
+    createdAt: (row.orders as unknown as { created_at: string }).created_at,
+  }))
+}
+
 async function fetchTodayOrders(): Promise<Order[]> {
   const supabase = await createSupabaseServerClient()
   // Fetch last 48h — the client filters to "today" using browser local time
@@ -85,19 +108,10 @@ async function fetchTodayOrders(): Promise<Order[]> {
 }
 
 export default async function DashboardPage() {
-  const orders = await fetchTodayOrders()
+  const [orders, rawItems] = await Promise.all([fetchTodayOrders(), fetchMonthItems()])
 
   // Pass raw ISO timestamps to client — revenue/count/hourly computed there using browser timezone
   const rawOrders = orders.map((o) => ({ total: o.total, createdAt: o.timestamp }))
-
-  // Flatten all order items with their order timestamp so TopProducts can filter by "today" in browser timezone
-  const rawItems = orders.flatMap((o) =>
-    o.items.map((item) => ({
-      productName: item.product.name,
-      quantity: item.quantity,
-      createdAt: o.timestamp,
-    }))
-  )
 
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>

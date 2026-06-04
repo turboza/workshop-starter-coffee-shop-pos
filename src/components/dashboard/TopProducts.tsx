@@ -1,12 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { topProductsWeek, topProductsMonth } from '@/src/data/stats'
 
 type Period = 'TODAY' | 'WEEK' | 'MONTH'
 type Item = { rank: number; name: string; count: number }
 
 export type RawItem = { productName: string; quantity: number; createdAt: string }
+
+function inWindow(isoString: string, days: number): boolean {
+  return new Date(isoString) >= new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+}
 
 function isToday(isoString: string): boolean {
   const d = new Date(isoString)
@@ -18,10 +21,10 @@ function isToday(isoString: string): boolean {
   )
 }
 
-function buildTopToday(rawItems: RawItem[]): Item[] {
+function buildTop(rawItems: RawItem[], filter: (iso: string) => boolean): Item[] {
   const counts = new Map<string, number>()
   for (const item of rawItems) {
-    if (!isToday(item.createdAt)) continue
+    if (!filter(item.createdAt)) continue
     counts.set(item.productName, (counts.get(item.productName) ?? 0) + item.quantity)
   }
   return Array.from(counts.entries())
@@ -33,9 +36,10 @@ function buildTopToday(rawItems: RawItem[]): Item[] {
 export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
   const [period, setPeriod] = useState<Period>('TODAY')
 
-  const todayItems = buildTopToday(rawItems)
-  const isSample = period !== 'TODAY'
-  const items: Item[] = period === 'TODAY' ? todayItems : period === 'WEEK' ? topProductsWeek : topProductsMonth
+  const items: Item[] =
+    period === 'TODAY' ? buildTop(rawItems, isToday) :
+    period === 'WEEK'  ? buildTop(rawItems, (iso) => inWindow(iso, 7)) :
+                         buildTop(rawItems, (iso) => inWindow(iso, 30))
   const maxCount = items[0]?.count ?? 1
 
   return (
@@ -44,19 +48,9 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
       style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
     >
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <h3 className="font-display font-bold text-xl" style={{ color: 'var(--text)' }}>
-            Top products
-          </h3>
-          {isSample && (
-            <span
-              className="text-xs px-1.5 py-0.5 rounded font-medium"
-              style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)' }}
-            >
-              sample
-            </span>
-          )}
-        </div>
+        <h3 className="font-display font-bold text-xl" style={{ color: 'var(--text)' }}>
+          Top products
+        </h3>
         <div className="flex gap-1 rounded-lg overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
           {(['TODAY', 'WEEK', 'MONTH'] as Period[]).map((p) => (
             <button
@@ -76,7 +70,7 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
 
       {items.length === 0 ? (
         <p className="text-sm py-4 text-center" style={{ color: 'var(--text-faint)' }}>
-          No orders yet today
+          No orders yet
         </p>
       ) : (
         <div className="space-y-3">

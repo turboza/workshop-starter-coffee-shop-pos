@@ -36,7 +36,7 @@ src/
   lib/supabase-browser.ts   — session-aware client for client components (createBrowserClient from @supabase/ssr)
   data/products.ts          — 30 products across 5 categories + upcharge tables (still in code, not DB)
   data/sampleOrders.ts      — kept as reference; no longer used by LiveFeed
-  data/stats.ts             — sample stats; still used for Top Products, Avg Ticket, Voids (sample data)
+  data/stats.ts             — sample stats; only Voids Today still uses this (everything else is real DB data)
   context/CartContext.tsx   — CartProvider + useCart() hook (useReducer)
   components/
     ui/Badge.tsx            — new | void | live variants
@@ -51,7 +51,8 @@ src/
     dashboard/DashboardLive.tsx — CLIENT component; receives raw orders, filters to today in browser
                                   timezone, renders stat cards + hourly chart
     dashboard/HourlyChart.tsx — CLIENT component; accepts raw orders, buckets by local hour
-    dashboard/TopProducts.tsx — TODAY/WEEK/MONTH toggle, horizontal bar ranks (sample data)
+    dashboard/TopProducts.tsx — TODAY/WEEK/MONTH toggle, horizontal bar ranks (real data from order_items)
+    dashboard/DashboardHeader.tsx — CLIENT component; shows live greeting + date/time, updates every minute
     dashboard/LiveFeed.tsx  — order list with NEW/VOID badges; accepts `orders` prop
 app/
   layout.tsx                — root layout, CartProvider, Caveat + Geist fonts
@@ -59,7 +60,7 @@ app/
   page.tsx                  — Till screen (default route)
   payment/page.tsx          — Cash/Card selector, quick-cash buttons, change calc; saves to Supabase on confirm
   receipt/page.tsx          — Formatted receipt, 5s auto-return, Print/Email/SMS stubs
-  dashboard/page.tsx        — Server component (force-dynamic); fetches last 48h orders, passes to DashboardLive
+  dashboard/page.tsx        — Server component (force-dynamic); fetches last 48h orders + 30 days of order_items in parallel; passes to DashboardLive and TopProducts
 proxy.ts                    — route protection (replaces middleware.ts in Next.js 16); redirects
                               unauthenticated visitors to /login; redirects logged-in users away from /login
 app/
@@ -136,6 +137,6 @@ The plain `createClient` from `supabase-js` does not read cookies, so the server
 ## Next steps
 
 See SPEC.md for the full feature roadmap. Next priorities:
-1. Move products to Supabase (completes Phase 2) — rewires Till screen, enables real Top Products
-2. Add `voided` column to `orders` + void workflow
-3. Pull cashier name from auth session instead of hardcoded "Aey" (quick win from Phase 4)
+1. Add `voided` column to `orders` + void workflow (completes Voids Today stat card)
+2. Pull cashier name from auth session instead of hardcoded "Aey" (quick win from Phase 4)
+3. Move products to Supabase (Phase 2) — rewires Till screen
