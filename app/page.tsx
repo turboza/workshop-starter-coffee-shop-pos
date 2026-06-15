@@ -10,6 +10,8 @@ import { CartPanel } from '@/src/components/till/CartPanel'
 import { CustomizeModal } from '@/src/components/till/CustomizeModal'
 import { useCart } from '@/src/context/CartContext'
 import { AccountMenu } from '@/src/components/ui/AccountMenu'
+import { DashboardLink } from '@/src/components/ui/DashboardLink'
+import { DeniedBanner } from '@/src/components/ui/DeniedBanner'
 
 export default function TillPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Coffee')
@@ -27,6 +29,8 @@ export default function TillPage() {
 
   return (
     <div className="flex flex-col h-screen" style={{ background: 'var(--bg)' }}>
+      <DeniedBanner />
+
       {/* Top bar */}
       <header
         className="flex items-center justify-between px-4 py-2 text-xs shrink-0"
@@ -37,13 +41,7 @@ export default function TillPage() {
         </span>
         <div className="flex items-center gap-3">
           <span style={{ color: 'var(--text-muted)' }}>TABLET · iPad</span>
-          <Link
-            href="/dashboard"
-            className="px-3 py-1 rounded-lg text-xs font-medium"
-            style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)' }}
-          >
-            Dashboard
-          </Link>
+          <DashboardLink />
           <AccountMenu />
         </div>
       </header>

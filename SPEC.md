@@ -1,6 +1,6 @@
 # Coffee Shop POS — Product Spec
 
-## What's shipped (v0.2)
+## What's shipped (v0.3)
 
 All screens are implemented.
 
@@ -11,12 +11,14 @@ All screens are implemented.
 | Payment | `/payment` | ✅ Done |
 | Receipt | `/receipt` | ✅ Done |
 | Dashboard | `/dashboard` | ✅ Done |
+| Users & roles | `/users` | ✅ Done |
 
 **What's real (connected to Supabase):**
 - Orders saved to database on every payment confirm
 - Dashboard Live Feed shows real orders from today
 - Revenue · Today and Transactions stat cards use real data
 - Hourly Revenue chart uses real data (timezone-aware, uses browser local time)
+- Staff roles enforced server-side (cashier / manager); Users & roles screen lets managers promote/demote
 
 **Still sample/fake data (marked with "sample" badge on dashboard):**
 - Voids Today stat card
@@ -33,6 +35,18 @@ All screens are implemented.
 Supabase cloud project: `ialqovihedyaycazhwyh.supabase.co`
 
 ### Tables live in production
+
+**`profiles`** (added Phase 4)
+```
+id         uuid PK  FK → auth.users.id (cascade delete)
+role       text     -- 'cashier' | 'manager', default 'cashier'
+email      text     -- snapshot from auth.users at signup
+name       text     -- snapshot from user_metadata.name at signup
+created_at timestamptz default now()
+```
+- RLS enabled; cashier reads own row only; manager reads all rows
+- Signup trigger auto-creates a cashier profile for every new account
+- Guard trigger blocks: demoting the last manager, changing any column except role
 
 **`orders`**
 ```
@@ -87,9 +101,10 @@ Plan:
 | Route protection | All routes require login; proxy.ts redirects unauthenticated visitors | ✅ Done |
 | Logout | Dashboard sidebar + Till account menu (top-right avatar icon) | ✅ Done |
 | RLS tightened | `orders` and `order_items` now require `authenticated` role | ✅ Done |
-| Role: staff | Can access Till + Payment + Receipt only | Deferred |
-| Role: owner | Can access all screens including Dashboard | Deferred |
+| Role: cashier | Till only; dashboard + users screen blocked server-side | ✅ Done |
+| Role: manager | Till + Dashboard + Users & roles screen | ✅ Done |
 | Cashier name | Pull from auth session instead of hardcoded "Aey" | ✅ Done |
+| Users & roles screen | Manager views all staff, changes roles; last-manager guard | ✅ Done |
 | Per-staff sales | Filter dashboard live feed by cashier | Deferred |
 
 ---

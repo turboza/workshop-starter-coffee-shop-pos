@@ -9,6 +9,7 @@ import { DashboardHeader } from '@/src/components/dashboard/DashboardHeader'
 import { createSupabaseServerClient } from '@/src/lib/supabase-server'
 import { LogoutButton } from '@/src/components/ui/LogoutButton'
 import { Order } from '@/src/types'
+import { redirect } from 'next/navigation'
 
 type RawItem = { productName: string; quantity: number; createdAt: string }
 
@@ -108,6 +109,19 @@ async function fetchTodayOrders(): Promise<Order[]> {
 }
 
 export default async function DashboardPage() {
+  // Server gate — cashiers are bounced before any data is fetched
+  const supabase = await createSupabaseServerClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user!.id)
+    .single()
+
+  if (profile?.role !== 'manager') {
+    redirect('/?denied=managers-only')
+  }
+
   const [orders, rawItems] = await Promise.all([fetchTodayOrders(), fetchMonthItems()])
 
   // Pass raw ISO timestamps to client — revenue/count/hourly computed there using browser timezone
@@ -144,11 +158,11 @@ export default async function DashboardPage() {
             </li>
             <li>
               <Link
-                href="/"
+                href="/users"
                 className="flex items-center px-3 py-2 rounded-lg text-sm"
                 style={{ color: 'var(--text-muted)' }}
               >
-                Live feed
+                Users &amp; roles
               </Link>
             </li>
             <li>
