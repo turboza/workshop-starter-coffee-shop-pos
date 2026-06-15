@@ -51,7 +51,10 @@ export default function LoginPage() {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { name: name.trim() || email.split('@')[0] } },
+        options: {
+          data: { name: name.trim() || email.split('@')[0] },
+          emailRedirectTo: `${location.origin}/login`,
+        },
       })
       if (error) {
         setError(error.message)
