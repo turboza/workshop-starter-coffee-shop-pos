@@ -12,49 +12,152 @@ type Profile = {
   created_at: string
 }
 
-export function UsersTable({ profiles, currentUserId }: { profiles: Profile[]; currentUserId: string }) {
-  const router = useRouter()
-  const [busy, setBusy] = useState<string | null>(null)
+function RoleModal({
+  target,
+  currentUserId,
+  onClose,
+  onSaved,
+}: {
+  target: Profile
+  currentUserId: string
+  onClose: () => void
+  onSaved: () => void
+}) {
+  const [selected, setSelected] = useState<'cashier' | 'manager'>(target.role as 'cashier' | 'manager')
+  const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  async function changeRole(target: Profile, newRole: 'cashier' | 'manager') {
-    if (target.role === newRole) return
+  async function handleSave() {
+    if (selected === target.role) { onClose(); return }
 
-    // Warn manager they'll lose access if demoting themselves
-    if (target.id === currentUserId && newRole === 'cashier') {
+    if (target.id === currentUserId && selected === 'cashier') {
       const ok = confirm("You'll lose manager access after this change. Continue?")
       if (!ok) return
     }
 
     setError(null)
-    setBusy(target.id)
+    setBusy(true)
     const supabase = createSupabaseBrowserClient()
     const { error: err } = await supabase
       .from('profiles')
-      .update({ role: newRole })
+      .update({ role: selected })
       .eq('id', target.id)
 
-    setBusy(null)
+    setBusy(false)
 
     if (err) {
-      // Surface friendly DB guard messages (last-manager protection etc.)
       setError(err.message ?? 'Could not update role — please try again.')
       return
     }
 
-    router.refresh()
+    onSaved()
   }
 
   return (
-    <div>
-      {error && (
-        <div
-          className="mb-4 px-4 py-3 rounded-xl text-sm"
-          style={{ background: '#FEF2F2', color: 'var(--destructive)', border: '1px solid #FECACA' }}
-        >
-          {error}
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: 'rgba(0,0,0,0.35)' }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div
+        className="w-80 rounded-2xl p-6 space-y-5 shadow-xl"
+        style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+      >
+        {/* Header */}
+        <div>
+          <p className="text-xs" style={{ color: 'var(--text-faint)' }}>Change role for</p>
+          <p className="text-sm font-semibold mt-0.5" style={{ color: 'var(--text)' }}>
+            {target.name ?? target.email}
+          </p>
         </div>
-      )}
+
+        {/* Role options */}
+        <div className="space-y-2">
+          {(['manager', 'cashier'] as const).map((r) => (
+            <button
+              key={r}
+              onClick={() => setSelected(r)}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all"
+              style={
+                selected === r
+                  ? { background: 'var(--accent)', border: '2px solid var(--accent)' }
+                  : { background: 'var(--bg)', border: '2px solid var(--border-light)' }
+              }
+            >
+              <div
+                className="w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center"
+                style={
+                  selected === r
+                    ? { borderColor: '#fff', background: '#fff' }
+                    : { borderColor: 'var(--border)', background: 'transparent' }
+                }
+              >
+                {selected === r && (
+                  <div className="w-2 h-2 rounded-full" style={{ background: 'var(--accent)' }} />
+                )}
+              </div>
+              <div>
+                <p
+                  className="text-sm font-semibold capitalize"
+                  style={{ color: selected === r ? '#fff' : 'var(--text)' }}
+                >
+                  {r}
+                </p>
+                <p
+                  className="text-xs mt-0.5"
+                  style={{ color: selected === r ? 'rgba(255,255,255,0.75)' : 'var(--text-muted)' }}
+                >
+                  {r === 'manager' ? 'Till · Dashboard · Users & roles' : 'Till only'}
+                </p>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        {error && (
+          <p className="text-xs px-1" style={{ color: 'var(--destructive)' }}>{error}</p>
+        )}
+
+        {/* Actions */}
+        <div className="flex gap-2 pt-1">
+          <button
+            onClick={onClose}
+            className="flex-1 py-2 rounded-xl text-sm font-medium"
+            style={{ background: 'var(--bg-subtle)', color: 'var(--text-muted)' }}
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={busy}
+            className="flex-1 py-2 rounded-xl text-sm font-semibold"
+            style={{ background: 'var(--accent)', color: '#fff', opacity: busy ? 0.6 : 1 }}
+          >
+            {busy ? 'Saving…' : 'Save'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function UserGroup({ label, profiles, currentUserId, onEdit }: {
+  label: string
+  profiles: Profile[]
+  currentUserId: string
+  onEdit: (p: Profile) => void
+}) {
+  if (profiles.length === 0) return null
+
+  return (
+    <div>
+      {/* Group label */}
+      <p
+        className="text-xs font-semibold tracking-widest uppercase px-1 mb-2"
+        style={{ color: 'var(--text-faint)' }}
+      >
+        {label} · {profiles.length}
+      </p>
 
       <div
         className="rounded-2xl overflow-hidden"
@@ -64,7 +167,8 @@ export function UsersTable({ profiles, currentUserId }: { profiles: Profile[]; c
         <div
           className="grid text-xs font-semibold tracking-widest uppercase px-5 py-3"
           style={{
-            gridTemplateColumns: '1fr 1fr auto',
+            gridTemplateColumns: '1fr 1fr 100px 60px',
+            gap: '1rem',
             color: 'var(--text-faint)',
             borderBottom: '1px solid var(--border-light)',
           }}
@@ -72,15 +176,16 @@ export function UsersTable({ profiles, currentUserId }: { profiles: Profile[]; c
           <span>Name / Email</span>
           <span>Joined</span>
           <span>Role</span>
+          <span></span>
         </div>
 
-        {/* Rows */}
         {profiles.map((p, i) => (
           <div
             key={p.id}
             className="grid items-center px-5 py-4"
             style={{
-              gridTemplateColumns: '1fr 1fr auto',
+              gridTemplateColumns: '1fr 1fr 100px 60px',
+              gap: '1rem',
               borderTop: i === 0 ? 'none' : '1px solid var(--border-light)',
             }}
           >
@@ -100,27 +205,54 @@ export function UsersTable({ profiles, currentUserId }: { profiles: Profile[]; c
               {new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
             </p>
 
-            {/* Role selector */}
-            <div className="flex gap-2">
-              {(['cashier', 'manager'] as const).map((r) => (
-                <button
-                  key={r}
-                  disabled={busy === p.id}
-                  onClick={() => changeRole(p, r)}
-                  className="px-3 py-1 rounded-lg text-xs font-semibold capitalize transition-opacity"
-                  style={
-                    p.role === r
-                      ? { background: 'var(--text)', color: '#fff', opacity: busy === p.id ? 0.5 : 1 }
-                      : { background: 'var(--bg-subtle)', color: 'var(--text-muted)', opacity: busy === p.id ? 0.5 : 1 }
-                  }
-                >
-                  {r}
-                </button>
-              ))}
-            </div>
+            {/* Role tag */}
+            <span
+              className="px-3 py-1 rounded-lg text-xs font-semibold capitalize justify-self-start"
+              style={
+                p.role === 'manager'
+                  ? { background: 'var(--accent-light)', color: 'var(--accent-dark)' }
+                  : { background: 'var(--bg-subtle)', color: 'var(--text-muted)' }
+              }
+            >
+              {p.role}
+            </span>
+
+            {/* Edit button */}
+            <button
+              onClick={() => onEdit(p)}
+              className="px-3 py-1 rounded-lg text-xs font-semibold"
+              style={{ background: 'var(--bg-subtle)', color: 'var(--text-muted)' }}
+            >
+              Edit
+            </button>
           </div>
         ))}
       </div>
+    </div>
+  )
+}
+
+export function UsersTable({ profiles, currentUserId }: { profiles: Profile[]; currentUserId: string }) {
+  const router = useRouter()
+  const [editing, setEditing] = useState<Profile | null>(null)
+
+  // Groups: managers first, then cashiers — each group sorted by join date (oldest first, from server)
+  const managers = profiles.filter((p) => p.role === 'manager')
+  const cashiers = profiles.filter((p) => p.role === 'cashier')
+
+  return (
+    <div className="space-y-6">
+      {editing && (
+        <RoleModal
+          target={editing}
+          currentUserId={currentUserId}
+          onClose={() => setEditing(null)}
+          onSaved={() => { setEditing(null); router.refresh() }}
+        />
+      )}
+
+      <UserGroup label="Managers" profiles={managers} currentUserId={currentUserId} onEdit={setEditing} />
+      <UserGroup label="Cashiers" profiles={cashiers} currentUserId={currentUserId} onEdit={setEditing} />
     </div>
   )
 }
