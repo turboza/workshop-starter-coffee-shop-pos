@@ -413,7 +413,12 @@ interface InventoryViewProps {
 export function InventoryView({ ingredients: initialIngredients, adjustments: initialAdjustments }: InventoryViewProps) {
   const router = useRouter()
   const [ingredients, setIngredients] = useState(initialIngredients)
-  const [adjustments] = useState(initialAdjustments)
+  const [adjustments, setAdjustments] = useState(initialAdjustments)
+
+  useEffect(() => {
+    setIngredients(initialIngredients)
+    setAdjustments(initialAdjustments)
+  }, [initialIngredients, initialAdjustments])
   const [filter, setFilter] = useState<FilterTab>('all')
   const [search, setSearch] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
