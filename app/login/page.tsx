@@ -148,10 +148,23 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-sm">
         <div className="rounded-2xl border border-border bg-card/95 p-8 shadow-xl backdrop-blur-sm">
           {/* Logo / title */}
-          <div className="mb-8 text-center">
-            <h1 className="mb-1 font-display text-4xl text-foreground">
-              Lina&apos;s Coffee
-            </h1>
+          <div className="mb-8 flex flex-col items-center text-center">
+            <Image
+              src="/brand/lina-logo.png"
+              alt="Lina's Coffee"
+              width={2118}
+              height={562}
+              priority
+              className="mb-3 h-auto w-full max-w-[16rem] dark:hidden"
+            />
+            <Image
+              src="/brand/lina-logo-dark.png"
+              alt="Lina's Coffee"
+              width={2118}
+              height={562}
+              priority
+              className="mb-3 hidden h-auto w-full max-w-[16rem] dark:block"
+            />
             <p className="text-sm text-muted-foreground">Point of Sale</p>
           </div>
 
