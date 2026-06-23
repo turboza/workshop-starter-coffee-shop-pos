@@ -31,6 +31,37 @@ const NAV_CATALOG = [
   { label: 'Inventory', href: '/inventory', icon: PackageIcon },
 ]
 
+function NavItem({ label, href, icon: Icon, isActive }: {
+  label: string
+  href: string
+  icon: React.ElementType
+  isActive: boolean
+}) {
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        render={<Link href={href} />}
+        isActive={isActive}
+        className={[
+          'relative',
+          isActive
+            ? 'data-active:bg-sidebar-active data-active:text-sidebar-active-foreground data-active:hover:bg-sidebar-active'
+            : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+        ].join(' ')}
+      >
+        {isActive && (
+          <span
+            aria-hidden
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-sidebar-active-foreground"
+          />
+        )}
+        <Icon className={isActive ? 'text-sidebar-active-foreground' : 'text-muted-foreground'} />
+        {label}
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+}
+
 export function ManagerSidebar({ displayName, role }: Props) {
   const pathname = usePathname()
 
@@ -43,8 +74,11 @@ export function ManagerSidebar({ displayName, role }: Props) {
         </div>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton render={<Link href="/" />} className="text-muted-foreground">
-              <ArrowLeftIcon />
+            <SidebarMenuButton
+              render={<Link href="/" />}
+              className="text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            >
+              <ArrowLeftIcon className="text-muted-foreground" />
               Back to till
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -56,17 +90,14 @@ export function ManagerSidebar({ displayName, role }: Props) {
           <SidebarGroupLabel>Operate</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {NAV_OPERATE.map(({ label, href, icon: Icon }) => (
-                <SidebarMenuItem key={href}>
-                  <SidebarMenuButton
-                    render={<Link href={href} />}
-                    isActive={pathname === href}
-                    className={pathname === href ? 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground' : ''}
-                  >
-                    <Icon />
-                    {label}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              {NAV_OPERATE.map(({ label, href, icon }) => (
+                <NavItem
+                  key={href}
+                  label={label}
+                  href={href}
+                  icon={icon}
+                  isActive={pathname === href}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -76,17 +107,14 @@ export function ManagerSidebar({ displayName, role }: Props) {
           <SidebarGroupLabel>Catalog</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {NAV_CATALOG.map(({ label, href, icon: Icon }) => (
-                <SidebarMenuItem key={href}>
-                  <SidebarMenuButton
-                    render={<Link href={href} />}
-                    isActive={pathname === href}
-                    className={pathname === href ? 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground' : ''}
-                  >
-                    <Icon />
-                    {label}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+              {NAV_CATALOG.map(({ label, href, icon }) => (
+                <NavItem
+                  key={href}
+                  label={label}
+                  href={href}
+                  icon={icon}
+                  isActive={pathname === href}
+                />
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
