@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/sidebar'
 import { LogoutButton } from '@/src/components/ui/LogoutButton'
 import { AnimatedThemeToggler } from '@/src/components/theme/AnimatedThemeToggler'
+import { TopLoadingBar } from '@/src/components/ui/TopLoadingBar'
 
 interface Props {
   displayName: string
@@ -50,6 +51,7 @@ function NavItem({ label, href, icon: Icon, isActive }: {
             : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
         ].join(' ')}
       >
+        <TopLoadingBar />
         {isActive && (
           <span
             aria-hidden
@@ -79,6 +81,7 @@ export function ManagerSidebar({ displayName, role }: Props) {
               render={<Link href="/" />}
               className="text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
             >
+              <TopLoadingBar />
               <ArrowLeftIcon className="text-muted-foreground" />
               Back to till
             </SidebarMenuButton>

@@ -1,20 +1,13 @@
 export const dynamic = 'force-dynamic'
 
-import { createSupabaseServerClient } from '@/src/lib/supabase-server'
-import { UsersTable } from '@/src/components/users/UsersTable'
+import { Suspense } from 'react'
 import { SidebarTrigger } from '@/components/ui/sidebar'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { UsersData } from './UsersData'
+import { UsersSkeleton } from './UsersSkeleton'
 
-export default async function UsersPage() {
-  const supabase = await createSupabaseServerClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  const { data: profiles } = await supabase
-    .from('profiles')
-    .select('id, name, email, role, created_at')
-    .order('created_at', { ascending: true })
-
+export default function UsersPage() {
   return (
     <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
       <header
@@ -24,6 +17,7 @@ export default async function UsersPage() {
         <SidebarTrigger />
         <span className="font-bold" style={{ color: 'var(--foreground)' }}>Users &amp; roles</span>
       </header>
+
       <div>
         <p className="text-xs mb-1" style={{ color: 'var(--muted-foreground)' }}>
           System / Users &amp; roles
@@ -31,12 +25,9 @@ export default async function UsersPage() {
         <h1 className="font-bold text-2xl md:text-3xl" style={{ color: 'var(--foreground)' }}>
           Users &amp; roles
         </h1>
-        <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>
-          {profiles?.length ?? 0} {profiles?.length === 1 ? 'person' : 'people'} · cashiers use the till · managers also access the dashboard
-        </p>
       </div>
 
-      {/* Roles legend */}
+      {/* Roles legend — static, paints instantly */}
       <Card>
         <CardHeader>
           <CardTitle>Roles &amp; permissions</CardTitle>
@@ -56,8 +47,9 @@ export default async function UsersPage() {
         </CardContent>
       </Card>
 
-      {/* Users table */}
-      <UsersTable profiles={profiles ?? []} currentUserId={user!.id} />
+      <Suspense fallback={<UsersSkeleton />}>
+        <UsersData />
+      </Suspense>
     </main>
   )
 }
