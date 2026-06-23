@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
+import { Button } from '@/components/ui/button'
 
 type Mode = 'signin' | 'signup'
 
@@ -87,30 +88,30 @@ export default function LoginPage() {
   const inputStyle = {
     border: '1px solid var(--border)',
     background: 'var(--card)',
-    color: 'var(--text)',
+    color: 'var(--foreground)',
   }
 
   return (
     <div
       className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: 'var(--bg)' }}
+      style={{ background: 'var(--background)' }}
     >
       <div
         className="w-full max-w-sm rounded-2xl shadow-sm p-8"
-        style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+        style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
       >
         {/* Logo / title */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-display mb-1" style={{ color: 'var(--text)' }}>
+          <h1 className="text-3xl font-bold mb-1" style={{ color: 'var(--foreground)' }}>
             Lina&apos;s Coffee
           </h1>
-          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
             Point of Sale
           </p>
         </div>
 
         {/* Mode tabs */}
-        <div className="flex rounded-xl p-1 mb-6" style={{ background: 'var(--bg-subtle)' }}>
+        <div className="flex rounded-xl p-1 mb-6" style={{ background: 'var(--muted)' }}>
           {(['signin', 'signup'] as Mode[]).map((m) => (
             <button
               key={m}
@@ -118,8 +119,8 @@ export default function LoginPage() {
               className="flex-1 py-2 rounded-lg text-sm font-medium transition-colors"
               style={
                 mode === m
-                  ? { background: 'var(--card)', color: 'var(--text)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
-                  : { color: 'var(--text-muted)' }
+                  ? { background: 'var(--card)', color: 'var(--foreground)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
+                  : { color: 'var(--muted-foreground)' }
               }
             >
               {m === 'signin' ? 'Sign in' : 'Sign up'}
@@ -133,7 +134,7 @@ export default function LoginPage() {
           {/* Name — sign up only */}
           {mode === 'signup' && (
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium" style={{ color: 'var(--text)' }}>
+              <label className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
                 Name
               </label>
               <input
@@ -149,7 +150,7 @@ export default function LoginPage() {
 
           {/* Email */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium" style={{ color: 'var(--text)' }}>
+            <label className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
               Email
             </label>
             <input
@@ -165,7 +166,7 @@ export default function LoginPage() {
 
           {/* Password */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium" style={{ color: 'var(--text)' }}>
+            <label className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
               Password
             </label>
             <div className="relative">
@@ -183,7 +184,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-xs"
-                style={{ color: 'var(--text-faint)' }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 {showPassword ? 'Hide' : 'Show'}
               </button>
@@ -198,7 +199,7 @@ export default function LoginPage() {
                       key={seg}
                       className="h-1.5 flex-1 rounded-full transition-colors"
                       style={{
-                        background: strength.score >= seg ? strength.color : 'var(--border-light)',
+                        background: strength.score >= seg ? strength.color : 'var(--border)',
                       }}
                     />
                   ))}
@@ -213,7 +214,7 @@ export default function LoginPage() {
           {/* Confirm password — sign up only */}
           {mode === 'signup' && (
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium" style={{ color: 'var(--text)' }}>
+              <label className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
                 Confirm password
               </label>
               <input
@@ -243,21 +244,20 @@ export default function LoginPage() {
           )}
 
           {success && (
-            <p className="text-sm rounded-xl px-3 py-2.5" style={{ background: '#F0FDF4', color: 'var(--success)' }}>
+            <p className="text-sm rounded-xl px-3 py-2.5" style={{ background: 'var(--muted)', color: 'oklch(0.527 0.154 150)' }}>
               {success}
             </p>
           )}
 
-          <button
+          <Button
             type="submit"
             disabled={loading || confirmMismatch}
-            className="w-full py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity disabled:opacity-60"
-            style={{ background: 'var(--accent)' }}
+            className="w-full"
           >
             {loading
               ? mode === 'signin' ? 'Signing in…' : 'Creating account…'
               : mode === 'signin' ? 'Sign in' : 'Create account'}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

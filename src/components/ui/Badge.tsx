@@ -8,7 +8,7 @@ export function Badge({ variant, className = '' }: BadgeProps) {
     return (
       <span
         className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold tracking-wide ${className}`}
-        style={{ background: 'var(--warning-bg)', color: 'var(--warning-text)' }}
+        style={{ background: 'var(--muted)', color: 'var(--foreground)' }}
       >
         NEW
       </span>
@@ -19,7 +19,7 @@ export function Badge({ variant, className = '' }: BadgeProps) {
     return (
       <span
         className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold tracking-wide ${className}`}
-        style={{ background: 'var(--destructive-bg)', color: 'var(--destructive)' }}
+        style={{ background: 'var(--destructive)', color: 'var(--destructive-foreground)' }}
       >
         VOID
       </span>
@@ -30,9 +30,9 @@ export function Badge({ variant, className = '' }: BadgeProps) {
   return (
     <span
       className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-semibold tracking-wide ${className}`}
-      style={{ background: 'var(--destructive-bg)', color: 'var(--destructive)' }}
+      style={{ background: 'var(--destructive)', color: 'var(--destructive-foreground)' }}
     >
-      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+      <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
       LIVE
     </span>
   )

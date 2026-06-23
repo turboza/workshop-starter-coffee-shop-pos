@@ -34,7 +34,7 @@ interface ProductGridProps {
 export function ProductGrid({ products, onSelect }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <div className="flex items-center justify-center py-20" style={{ color: 'var(--text-faint)' }}>
+      <div className="flex items-center justify-center py-20" style={{ color: 'var(--muted-foreground)' }}>
         <p className="text-sm">No products found</p>
       </div>
     )
@@ -50,7 +50,7 @@ export function ProductGrid({ products, onSelect }: ProductGridProps) {
           className="relative flex flex-col rounded-xl overflow-hidden text-left group"
           style={{
             background: 'var(--card)',
-            border: '1px solid var(--border-light)',
+            border: '1px solid var(--border)',
             opacity: product.soldOut ? 0.6 : 1,
             cursor: product.soldOut ? 'not-allowed' : 'pointer',
           }}
@@ -64,7 +64,7 @@ export function ProductGrid({ products, onSelect }: ProductGridProps) {
                   className="px-2 py-1 rounded text-xs font-semibold tracking-widest uppercase"
                   style={{
                     background: 'rgba(255,255,255,0.9)',
-                    color: 'var(--text-muted)',
+                    color: 'var(--muted-foreground)',
                     border: '1px solid var(--border)',
                   }}
                 >
@@ -75,7 +75,7 @@ export function ProductGrid({ products, onSelect }: ProductGridProps) {
             {!product.soldOut && (
               <div
                 className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ background: 'rgba(59,130,246,0.08)' }}
+                style={{ background: 'oklch(0.6716 0.1368 48.513 / 0.08)' }}
               />
             )}
           </div>
@@ -84,11 +84,11 @@ export function ProductGrid({ products, onSelect }: ProductGridProps) {
           <div className="p-3">
             <p
               className="text-sm font-semibold leading-tight"
-              style={{ color: product.soldOut ? 'var(--text-faint)' : 'var(--text)' }}
+              style={{ color: product.soldOut ? 'var(--muted-foreground)' : 'var(--foreground)' }}
             >
               {product.name}
             </p>
-            <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>
               ฿{product.price}
             </p>
           </div>

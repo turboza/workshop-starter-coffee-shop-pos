@@ -59,13 +59,13 @@ export default function ReceiptPage() {
   return (
     <div
       className="min-h-screen flex flex-col items-center justify-center p-6 relative"
-      style={{ background: 'var(--bg)' }}
+      style={{ background: 'var(--background)' }}
     >
       {/* Toast */}
       {toast && (
         <div
           className="fixed top-6 left-1/2 -translate-x-1/2 px-4 py-2 rounded-xl text-sm font-medium shadow-lg z-50"
-          style={{ background: 'var(--text)', color: '#fff' }}
+          style={{ background: 'var(--foreground)', color: 'var(--background)' }}
         >
           {toast}
         </div>
@@ -73,10 +73,10 @@ export default function ReceiptPage() {
 
       <div className="w-full max-w-md">
         {/* Done header */}
-        <h1 className="font-display font-bold text-center mb-2" style={{ fontSize: '4rem', color: 'var(--text)' }}>
+        <h1 className="font-bold text-center mb-2" style={{ fontSize: '4rem', color: 'var(--foreground)' }}>
           Done!
         </h1>
-        <p className="text-center text-sm mb-8" style={{ color: 'var(--text-muted)' }}>
+        <p className="text-center text-sm mb-8" style={{ color: 'var(--muted-foreground)' }}>
           Order #{order.id} · paid ฿{order.total}{' '}
           {order.paymentMethod === 'cash' ? 'cash' : 'card'}
         </p>
@@ -84,14 +84,14 @@ export default function ReceiptPage() {
         {/* Receipt card */}
         <div
           className="rounded-2xl overflow-hidden shadow-md"
-          style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+          style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
         >
-          <div className="p-6 font-mono text-sm" style={{ color: 'var(--text)' }}>
+          <div className="p-6 font-mono text-sm" style={{ color: 'var(--foreground)' }}>
             {/* Shop header */}
             <div className="text-center mb-4">
               <p className="font-bold text-base">Lina&apos;s Coffee</p>
-              <p style={{ color: 'var(--text-muted)' }}>Ekkamai · Bangkok</p>
-              <p style={{ color: 'var(--text-muted)' }}>
+              <p style={{ color: 'var(--muted-foreground)' }}>Ekkamai · Bangkok</p>
+              <p style={{ color: 'var(--muted-foreground)' }}>
                 {dateStr} · {order.timestamp}
               </p>
             </div>
@@ -106,7 +106,7 @@ export default function ReceiptPage() {
                   <div key={item.id} className="flex justify-between gap-2">
                     <span className="flex-1 truncate">
                       {item.quantity}× {item.product.name}
-                      {opts && <span style={{ color: 'var(--text-muted)' }}> · {opts}</span>}
+                      {opts && <span style={{ color: 'var(--muted-foreground)' }}> · {opts}</span>}
                     </span>
                     <span className="shrink-0">฿{item.unitPrice * item.quantity}</span>
                   </div>
@@ -119,11 +119,11 @@ export default function ReceiptPage() {
             {/* Totals */}
             <div className="my-3 space-y-1">
               <div className="flex justify-between">
-                <span style={{ color: 'var(--text-muted)' }}>Subtotal</span>
+                <span style={{ color: 'var(--muted-foreground)' }}>Subtotal</span>
                 <span>฿{order.subtotal}</span>
               </div>
               <div className="flex justify-between">
-                <span style={{ color: 'var(--text-muted)' }}>VAT inc.</span>
+                <span style={{ color: 'var(--muted-foreground)' }}>VAT inc.</span>
                 <span>฿{order.vat}</span>
               </div>
               <div className="flex justify-between font-bold text-base mt-1">
@@ -133,11 +133,11 @@ export default function ReceiptPage() {
               {order.paymentMethod === 'cash' && (
                 <>
                   <div className="flex justify-between">
-                    <span style={{ color: 'var(--text-muted)' }}>Cash</span>
+                    <span style={{ color: 'var(--muted-foreground)' }}>Cash</span>
                     <span>฿{order.cashReceived}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span style={{ color: 'var(--text-muted)' }}>Change</span>
+                    <span style={{ color: 'var(--muted-foreground)' }}>Change</span>
                     <span>฿{order.change}</span>
                   </div>
                 </>
@@ -147,7 +147,7 @@ export default function ReceiptPage() {
             <p style={{ color: 'var(--border)' }}>{'—'.repeat(42)}</p>
 
             {/* Footer */}
-            <div className="text-center mt-3" style={{ color: 'var(--text-muted)' }}>
+            <div className="text-center mt-3" style={{ color: 'var(--muted-foreground)' }}>
               <p>Thank you!</p>
               <p>#{order.id} · {order.cashier}</p>
             </div>
@@ -164,7 +164,7 @@ export default function ReceiptPage() {
               style={{
                 background: 'var(--card)',
                 borderColor: 'var(--border)',
-                color: 'var(--text)',
+                color: 'var(--foreground)',
               }}
             >
               {action}
@@ -172,15 +172,15 @@ export default function ReceiptPage() {
           ))}
           <button
             onClick={handleNewOrder}
-            className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
-            style={{ background: 'var(--accent)' }}
+            className="px-5 py-2.5 rounded-xl text-sm font-semibold"
+            style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
           >
             New order
           </button>
         </div>
 
         {/* Countdown */}
-        <p className="text-center text-xs mt-4 italic" style={{ color: 'var(--text-muted)' }}>
+        <p className="text-center text-xs mt-4 italic" style={{ color: 'var(--muted-foreground)' }}>
           auto-returns to till in {countdown}s ↺
         </p>
       </div>

@@ -45,10 +45,10 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
   return (
     <div
       className="rounded-xl p-5"
-      style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+      style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-display font-bold text-xl" style={{ color: 'var(--text)' }}>
+        <h3 className="font-bold text-xl" style={{ color: 'var(--foreground)' }}>
           Top products
         </h3>
         <div className="flex gap-1 rounded-lg overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
@@ -58,8 +58,8 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
               onClick={() => setPeriod(p)}
               className="px-3 py-1 text-xs font-semibold"
               style={{
-                background: period === p ? 'var(--text)' : 'transparent',
-                color: period === p ? '#fff' : 'var(--text-muted)',
+                background: period === p ? 'var(--primary)' : 'transparent',
+                color: period === p ? 'var(--primary-foreground)' : 'var(--muted-foreground)',
               }}
             >
               {p}
@@ -69,29 +69,29 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
       </div>
 
       {items.length === 0 ? (
-        <p className="text-sm py-4 text-center" style={{ color: 'var(--text-faint)' }}>
+        <p className="text-sm py-4 text-center" style={{ color: 'var(--muted-foreground)' }}>
           No orders yet
         </p>
       ) : (
         <div className="space-y-3">
           {items.map((item) => (
             <div key={item.rank} className="flex items-center gap-3">
-              <span className="text-sm w-4 shrink-0" style={{ color: 'var(--text-muted)' }}>
+              <span className="text-sm w-4 shrink-0" style={{ color: 'var(--muted-foreground)' }}>
                 {item.rank}
               </span>
-              <span className="text-sm font-medium w-28 shrink-0" style={{ color: 'var(--text)' }}>
+              <span className="text-sm font-medium w-28 shrink-0" style={{ color: 'var(--foreground)' }}>
                 {item.name}
               </span>
-              <div className="flex-1 h-3 rounded-full overflow-hidden" style={{ background: 'var(--bg-subtle)' }}>
+              <div className="flex-1 h-3 rounded-full overflow-hidden" style={{ background: 'var(--muted)' }}>
                 <div
                   className="h-full rounded-full"
                   style={{
                     width: `${(item.count / maxCount) * 100}%`,
-                    background: 'var(--accent)',
+                    background: 'var(--primary)',
                   }}
                 />
               </div>
-              <span className="text-sm w-8 text-right shrink-0" style={{ color: 'var(--text)' }}>
+              <span className="text-sm w-8 text-right shrink-0" style={{ color: 'var(--foreground)' }}>
                 {item.count}
               </span>
             </div>

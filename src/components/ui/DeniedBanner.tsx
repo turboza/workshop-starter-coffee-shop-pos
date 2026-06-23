@@ -20,7 +20,7 @@ function BannerInner() {
   return (
     <div
       className="fixed top-3 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-xl text-sm font-medium shadow-lg"
-      style={{ background: 'var(--destructive)', color: '#fff' }}
+      style={{ background: 'var(--destructive)', color: 'var(--destructive-foreground)' }}
     >
       Managers only — the dashboard is for managers.
     </div>

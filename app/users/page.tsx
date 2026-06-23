@@ -26,21 +26,21 @@ export default async function UsersPage() {
     .order('created_at', { ascending: true })
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--background)' }}>
       {/* Sidebar — same as dashboard */}
       <aside
         className="hidden md:flex flex-col w-48 lg:w-56 shrink-0 p-4 gap-6"
-        style={{ background: 'var(--card)', borderRight: '1px solid var(--border-light)' }}
+        style={{ background: 'var(--card)', borderRight: '1px solid var(--border)' }}
       >
         <div className="pt-2">
-          <h1 className="font-display font-bold text-xl" style={{ color: 'var(--text)' }}>
+          <h1 className="font-bold text-xl" style={{ color: 'var(--foreground)' }}>
             Lina&apos;s POS
           </h1>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>manager</p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>manager</p>
         </div>
 
         <nav className="flex-1">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--text-faint)' }}>
+          <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>
             Operate
           </p>
           <ul className="space-y-1">
@@ -48,7 +48,7 @@ export default async function UsersPage() {
               <Link
                 href="/dashboard"
                 className="flex items-center px-3 py-2 rounded-lg text-sm"
-                style={{ color: 'var(--text-muted)' }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 Dashboard
               </Link>
@@ -56,7 +56,7 @@ export default async function UsersPage() {
             <li>
               <span
                 className="flex items-center px-3 py-2 rounded-lg text-sm font-semibold"
-                style={{ background: 'var(--text)', color: '#fff' }}
+                style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
               >
                 Users &amp; roles
               </span>
@@ -65,7 +65,7 @@ export default async function UsersPage() {
               <Link
                 href="/"
                 className="flex items-center px-3 py-2 rounded-lg text-sm"
-                style={{ color: 'var(--text-muted)' }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 ← Back to till
               </Link>
@@ -73,23 +73,20 @@ export default async function UsersPage() {
           </ul>
         </nav>
 
-        <LogoutButton
-          className="flex items-center px-3 py-2 rounded-lg text-sm w-full text-left"
-          style={{ color: 'var(--text-muted)' }}
-        />
+        <LogoutButton />
       </aside>
 
       {/* Main content */}
       <main className="flex-1 overflow-y-auto p-6 space-y-6">
         {/* Header */}
         <div>
-          <p className="text-xs mb-1" style={{ color: 'var(--text-faint)' }}>
+          <p className="text-xs mb-1" style={{ color: 'var(--muted-foreground)' }}>
             System / Users &amp; roles
           </p>
-          <h1 className="font-display font-bold text-3xl" style={{ color: 'var(--text)' }}>
+          <h1 className="font-bold text-3xl" style={{ color: 'var(--foreground)' }}>
             Users &amp; roles
           </h1>
-          <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>
             {profiles?.length ?? 0} {profiles?.length === 1 ? 'person' : 'people'} · cashiers use the till · managers also access the dashboard
           </p>
         </div>
@@ -97,9 +94,9 @@ export default async function UsersPage() {
         {/* Roles legend */}
         <div
           className="rounded-2xl p-5 space-y-3"
-          style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+          style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
         >
-          <h2 className="text-sm font-semibold" style={{ color: 'var(--text)' }}>Roles &amp; permissions</h2>
+          <h2 className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>Roles &amp; permissions</h2>
           <div className="space-y-2">
             {[
               { role: 'Manager', perms: 'Till · Dashboard · Users & roles' },
@@ -107,8 +104,8 @@ export default async function UsersPage() {
             ].map(({ role, perms }) => (
               <div key={role} className="flex items-center justify-between">
                 <div>
-                  <span className="text-sm font-medium" style={{ color: 'var(--text)' }}>{role}</span>
-                  <span className="text-xs ml-2" style={{ color: 'var(--text-muted)' }}>{perms}</span>
+                  <span className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>{role}</span>
+                  <span className="text-xs ml-2" style={{ color: 'var(--muted-foreground)' }}>{perms}</span>
                 </div>
               </div>
             ))}

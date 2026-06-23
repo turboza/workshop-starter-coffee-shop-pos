@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
 import { Category, Product } from '@/src/types'
 import { products } from '@/src/data/products'
 import { CategoryTabs } from '@/src/components/till/CategoryTabs'
@@ -28,19 +27,19 @@ export default function TillPage() {
   })
 
   return (
-    <div className="flex flex-col h-screen" style={{ background: 'var(--bg)' }}>
+    <div className="flex flex-col h-screen" style={{ background: 'var(--background)' }}>
       <DeniedBanner />
 
       {/* Top bar */}
       <header
         className="flex items-center justify-between px-4 py-2 text-xs shrink-0"
-        style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border-light)' }}
+        style={{ background: 'var(--background)', borderBottom: '1px solid var(--border)' }}
       >
-        <span style={{ color: 'var(--text-muted)' }}>
+        <span style={{ color: 'var(--muted-foreground)' }}>
           {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · Lina&apos;s POS
         </span>
         <div className="flex items-center gap-3">
-          <span style={{ color: 'var(--text-muted)' }}>TABLET · iPad</span>
+          <span style={{ color: 'var(--muted-foreground)' }}>TABLET · iPad</span>
           <DashboardLink />
           <AccountMenu />
         </div>
@@ -64,7 +63,7 @@ export default function TillPage() {
         {/* Cart sidebar — desktop */}
         <div
           className="hidden md:flex flex-col w-72 lg:w-80 p-3 shrink-0"
-          style={{ borderLeft: '1px solid var(--border-light)' }}
+          style={{ borderLeft: '1px solid var(--border)' }}
         >
           <CartPanel />
         </div>
@@ -73,20 +72,23 @@ export default function TillPage() {
       {/* Mobile cart bar */}
       <div
         className="md:hidden flex items-center justify-between px-4 py-3 shrink-0"
-        style={{ background: 'var(--card)', borderTop: '1px solid var(--border-light)' }}
+        style={{ background: 'var(--card)', borderTop: '1px solid var(--border)' }}
       >
         <div>
-          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
             {items.length} item{items.length !== 1 ? 's' : ''}
           </p>
           {items.length > 0 && (
-            <p className="text-sm font-bold" style={{ color: 'var(--text)' }}>฿{total}</p>
+            <p className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>฿{total}</p>
           )}
         </div>
         <button
           onClick={() => setCartOpen(true)}
-          className="px-4 py-2 rounded-xl text-sm font-semibold text-white"
-          style={{ background: items.length > 0 ? 'var(--accent)' : 'var(--border)' }}
+          className="px-4 py-2 rounded-xl text-sm font-semibold"
+          style={{
+            background: items.length > 0 ? 'var(--primary)' : 'var(--muted)',
+            color: items.length > 0 ? 'var(--primary-foreground)' : 'var(--muted-foreground)',
+          }}
         >
           {items.length > 0 ? 'View cart' : 'Empty'}
         </button>
@@ -101,11 +103,11 @@ export default function TillPage() {
         >
           <div
             className="rounded-t-2xl p-4"
-            style={{ background: 'var(--bg)', height: '80vh' }}
+            style={{ background: 'var(--background)', height: '80vh' }}
           >
             <div className="flex justify-between items-center mb-3">
-              <span className="font-semibold" style={{ color: 'var(--text)' }}>Your order</span>
-              <button onClick={() => setCartOpen(false)} style={{ color: 'var(--text-muted)' }}>✕</button>
+              <span className="font-semibold" style={{ color: 'var(--foreground)' }}>Your order</span>
+              <button onClick={() => setCartOpen(false)} style={{ color: 'var(--muted-foreground)' }}>✕</button>
             </div>
             <CartPanel />
           </div>

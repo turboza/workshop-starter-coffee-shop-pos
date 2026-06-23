@@ -35,10 +35,10 @@ export function DashboardHeader() {
 
   return (
     <div>
-      <h2 className="font-display font-bold text-3xl" style={{ color: 'var(--text)' }}>
+      <h2 className="font-bold text-3xl" style={{ color: 'var(--foreground)' }}>
         {greeting}{name ? `, ${name}` : ''}
       </h2>
-      <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>
+      <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>
         {dateStr} · {timeStr}
       </p>
     </div>

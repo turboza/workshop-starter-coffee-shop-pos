@@ -5,10 +5,10 @@ export function LiveFeed({ orders }: { orders: Order[] }) {
   return (
     <div
       className="rounded-xl p-5"
-      style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+      style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-display font-bold text-xl" style={{ color: 'var(--text)' }}>
+        <h3 className="font-bold text-xl" style={{ color: 'var(--foreground)' }}>
           Live feed
         </h3>
         <Badge variant="live" />
@@ -30,30 +30,30 @@ export function LiveFeed({ orders }: { orders: Order[] }) {
               key={order.id}
               className="flex items-start justify-between py-3 gap-3"
               style={{
-                borderBottom: i < orders.length - 1 ? '1px solid var(--border-light)' : 'none',
+                borderBottom: i < orders.length - 1 ? '1px solid var(--border)' : 'none',
               }}
             >
               <div className="flex gap-4 min-w-0 flex-1">
-                <span className="text-sm shrink-0 w-10" style={{ color: 'var(--text-muted)' }}>
+                <span className="text-sm shrink-0 w-10" style={{ color: 'var(--muted-foreground)' }}>
                   {new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
                 <div className="min-w-0">
                   <p
                     className="text-sm font-medium truncate"
-                    style={{ color: order.voided ? 'var(--text-muted)' : 'var(--text)' }}
+                    style={{ color: order.voided ? 'var(--muted-foreground)' : 'var(--foreground)' }}
                   >
                     {order.voided ? `Void · ${order.voidReason}` : itemSummary}
                   </p>
-                  <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
                     {order.cashier} · {order.voided ? 'void' : order.paymentMethod}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span
-                  className="font-display font-bold text-lg"
+                  className="font-bold text-lg"
                   style={{
-                    color: order.voided ? 'var(--destructive)' : 'var(--text)',
+                    color: order.voided ? 'var(--destructive)' : 'var(--foreground)',
                   }}
                 >
                   {order.voided ? `−฿${order.total}` : `฿${order.total}`}

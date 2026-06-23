@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
+import { Button } from '@/components/ui/button'
 
-export function LogoutButton({ className, style }: { className?: string; style?: React.CSSProperties }) {
+export function LogoutButton() {
   const router = useRouter()
 
   async function handleLogout() {
@@ -14,8 +15,8 @@ export function LogoutButton({ className, style }: { className?: string; style?:
   }
 
   return (
-    <button onClick={handleLogout} className={className} style={style}>
+    <Button variant="ghost" size="sm" onClick={handleLogout} className="w-full justify-start">
       Sign out
-    </button>
+    </Button>
   )
 }

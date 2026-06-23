@@ -61,12 +61,12 @@ function RoleModal({
     >
       <div
         className="w-80 rounded-2xl p-6 space-y-5 shadow-xl"
-        style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+        style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
       >
         {/* Header */}
         <div>
-          <p className="text-xs" style={{ color: 'var(--text-faint)' }}>Change role for</p>
-          <p className="text-sm font-semibold mt-0.5" style={{ color: 'var(--text)' }}>
+          <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>Change role for</p>
+          <p className="text-sm font-semibold mt-0.5" style={{ color: 'var(--foreground)' }}>
             {target.name ?? target.email}
           </p>
         </div>
@@ -80,32 +80,32 @@ function RoleModal({
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all"
               style={
                 selected === r
-                  ? { background: 'var(--accent)', border: '2px solid var(--accent)' }
-                  : { background: 'var(--bg)', border: '2px solid var(--border-light)' }
+                  ? { background: 'var(--primary)', border: '2px solid var(--primary)' }
+                  : { background: 'var(--muted)', border: '2px solid var(--border)' }
               }
             >
               <div
-                className="w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center"
+                className="size-4 rounded-full border-2 shrink-0 flex items-center justify-center"
                 style={
                   selected === r
-                    ? { borderColor: '#fff', background: '#fff' }
+                    ? { borderColor: 'var(--primary-foreground)', background: 'var(--primary-foreground)' }
                     : { borderColor: 'var(--border)', background: 'transparent' }
                 }
               >
                 {selected === r && (
-                  <div className="w-2 h-2 rounded-full" style={{ background: 'var(--accent)' }} />
+                  <div className="size-2 rounded-full" style={{ background: 'var(--primary)' }} />
                 )}
               </div>
               <div>
                 <p
                   className="text-sm font-semibold capitalize"
-                  style={{ color: selected === r ? '#fff' : 'var(--text)' }}
+                  style={{ color: selected === r ? 'var(--primary-foreground)' : 'var(--foreground)' }}
                 >
                   {r}
                 </p>
                 <p
                   className="text-xs mt-0.5"
-                  style={{ color: selected === r ? 'rgba(255,255,255,0.75)' : 'var(--text-muted)' }}
+                  style={{ color: selected === r ? 'rgba(255,255,255,0.75)' : 'var(--muted-foreground)' }}
                 >
                   {r === 'manager' ? 'Till · Dashboard · Users & roles' : 'Till only'}
                 </p>
@@ -123,7 +123,7 @@ function RoleModal({
           <button
             onClick={onClose}
             className="flex-1 py-2 rounded-xl text-sm font-medium"
-            style={{ background: 'var(--bg-subtle)', color: 'var(--text-muted)' }}
+            style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}
           >
             Cancel
           </button>
@@ -131,7 +131,7 @@ function RoleModal({
             onClick={handleSave}
             disabled={busy}
             className="flex-1 py-2 rounded-xl text-sm font-semibold"
-            style={{ background: 'var(--accent)', color: '#fff', opacity: busy ? 0.6 : 1 }}
+            style={{ background: 'var(--primary)', color: 'var(--primary-foreground)', opacity: busy ? 0.6 : 1 }}
           >
             {busy ? 'Saving…' : 'Save'}
           </button>
@@ -154,14 +154,14 @@ function UserGroup({ label, profiles, currentUserId, onEdit }: {
       {/* Group label */}
       <p
         className="text-xs font-semibold tracking-widest uppercase px-1 mb-2"
-        style={{ color: 'var(--text-faint)' }}
+        style={{ color: 'var(--muted-foreground)' }}
       >
         {label} · {profiles.length}
       </p>
 
       <div
         className="rounded-2xl overflow-hidden"
-        style={{ border: '1px solid var(--border-light)', background: 'var(--card)' }}
+        style={{ border: '1px solid var(--border)', background: 'var(--card)' }}
       >
         {/* Table header */}
         <div
@@ -169,8 +169,8 @@ function UserGroup({ label, profiles, currentUserId, onEdit }: {
           style={{
             gridTemplateColumns: '1fr 1fr 100px 60px',
             gap: '1rem',
-            color: 'var(--text-faint)',
-            borderBottom: '1px solid var(--border-light)',
+            color: 'var(--muted-foreground)',
+            borderBottom: '1px solid var(--border)',
           }}
         >
           <span>Name / Email</span>
@@ -186,22 +186,22 @@ function UserGroup({ label, profiles, currentUserId, onEdit }: {
             style={{
               gridTemplateColumns: '1fr 1fr 100px 60px',
               gap: '1rem',
-              borderTop: i === 0 ? 'none' : '1px solid var(--border-light)',
+              borderTop: i === 0 ? 'none' : '1px solid var(--border)',
             }}
           >
             {/* Name + email */}
             <div>
-              <p className="text-sm font-medium" style={{ color: 'var(--text)' }}>
+              <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
                 {p.name ?? '—'}
                 {p.id === currentUserId && (
-                  <span className="ml-2 text-xs" style={{ color: 'var(--text-faint)' }}>you</span>
+                  <span className="ml-2 text-xs" style={{ color: 'var(--muted-foreground)' }}>you</span>
                 )}
               </p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{p.email}</p>
+              <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{p.email}</p>
             </div>
 
             {/* Joined date */}
-            <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
               {new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
             </p>
 
@@ -210,8 +210,8 @@ function UserGroup({ label, profiles, currentUserId, onEdit }: {
               className="px-3 py-1 rounded-lg text-xs font-semibold capitalize justify-self-start"
               style={
                 p.role === 'manager'
-                  ? { background: 'var(--accent-light)', color: 'var(--accent-dark)' }
-                  : { background: 'var(--bg-subtle)', color: 'var(--text-muted)' }
+                  ? { background: 'var(--primary)', color: 'var(--primary-foreground)' }
+                  : { background: 'var(--muted)', color: 'var(--muted-foreground)' }
               }
             >
               {p.role}
@@ -221,7 +221,7 @@ function UserGroup({ label, profiles, currentUserId, onEdit }: {
             <button
               onClick={() => onEdit(p)}
               className="px-3 py-1 rounded-lg text-xs font-semibold"
-              style={{ background: 'var(--bg-subtle)', color: 'var(--text-muted)' }}
+              style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}
             >
               Edit
             </button>

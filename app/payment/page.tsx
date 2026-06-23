@@ -91,18 +91,18 @@ export default function PaymentPage() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen" style={{ background: 'var(--bg)' }}>
+    <div className="flex flex-col md:flex-row h-screen" style={{ background: 'var(--background)' }}>
       {/* Left panel */}
       <div className="flex flex-col flex-1 p-6 md:p-10 gap-6">
         {/* Order summary header */}
         <div>
-          <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>
             PAYMENT · ORDER #{orderNumber}
           </p>
-          <p className="font-display font-bold" style={{ fontSize: '4rem', lineHeight: 1, color: 'var(--text)' }}>
+          <p className="font-bold" style={{ fontSize: '4rem', lineHeight: 1, color: 'var(--foreground)' }}>
             ฿{total}
           </p>
-          <p className="text-sm mt-2" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-sm mt-2" style={{ color: 'var(--muted-foreground)' }}>
             {items.reduce((s, i) => s + i.quantity, 0)} items · {cashier}
           </p>
         </div>
@@ -110,24 +110,24 @@ export default function PaymentPage() {
         {/* Items summary */}
         <div
           className="rounded-xl p-4 space-y-1.5"
-          style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+          style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
         >
           {items.map((item) => (
             <div key={item.id} className="flex justify-between text-sm">
-              <span style={{ color: 'var(--text)' }}>
+              <span style={{ color: 'var(--foreground)' }}>
                 {item.quantity}× {item.product.name}
                 {item.options.milk && item.options.milk !== 'Whole' && (
-                  <span style={{ color: 'var(--text-muted)' }}> · {item.options.milk}</span>
+                  <span style={{ color: 'var(--muted-foreground)' }}> · {item.options.milk}</span>
                 )}
               </span>
-              <span style={{ color: 'var(--text)' }}>฿{item.unitPrice * item.quantity}</span>
+              <span style={{ color: 'var(--foreground)' }}>฿{item.unitPrice * item.quantity}</span>
             </div>
           ))}
         </div>
 
         {/* Payment method */}
         <div>
-          <p className="text-sm font-semibold mb-3" style={{ color: 'var(--text)' }}>Payment method</p>
+          <p className="text-sm font-semibold mb-3" style={{ color: 'var(--foreground)' }}>Payment method</p>
           <div className="flex gap-3">
             {(['cash', 'card'] as const).map((m) => (
               <button
@@ -135,13 +135,13 @@ export default function PaymentPage() {
                 onClick={() => setMethod(m)}
                 className="flex-1 py-5 rounded-xl border-2 text-center"
                 style={{
-                  background: method === m ? 'var(--text)' : 'var(--card)',
-                  borderColor: method === m ? 'var(--text)' : 'var(--border)',
-                  color: method === m ? '#fff' : 'var(--text)',
+                  background: method === m ? 'var(--primary)' : 'var(--card)',
+                  borderColor: method === m ? 'var(--primary)' : 'var(--border)',
+                  color: method === m ? 'var(--primary-foreground)' : 'var(--foreground)',
                 }}
               >
-                <p className="font-display font-bold text-2xl capitalize">{m === 'cash' ? 'Cash' : 'Card'}</p>
-                <p className="text-xs mt-1" style={{ color: method === m ? 'rgba(255,255,255,0.6)' : 'var(--text-muted)' }}>
+                <p className="font-bold text-2xl capitalize">{m === 'cash' ? 'Cash' : 'Card'}</p>
+                <p className="text-xs mt-1" style={{ color: method === m ? 'rgba(255,255,255,0.6)' : 'var(--muted-foreground)' }}>
                   {m === 'cash' ? 'THB' : 'visa · master'}
                 </p>
               </button>
@@ -151,7 +151,7 @@ export default function PaymentPage() {
 
         {/* Customer phone (optional) */}
         <div>
-          <p className="text-sm font-semibold mb-2" style={{ color: 'var(--text)' }}>Customer (optional)</p>
+          <p className="text-sm font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Customer (optional)</p>
           <input
             type="tel"
             placeholder="phone number for loyalty…"
@@ -161,10 +161,10 @@ export default function PaymentPage() {
             style={{
               background: 'var(--card)',
               border: `1.5px dashed var(--border)`,
-              color: 'var(--text)',
+              color: 'var(--foreground)',
             }}
           />
-          <p className="text-xs mt-1 italic" style={{ color: 'var(--text-muted)' }}>
+          <p className="text-xs mt-1 italic" style={{ color: 'var(--muted-foreground)' }}>
             ↑ skips silently if left blank
           </p>
         </div>
@@ -173,32 +173,32 @@ export default function PaymentPage() {
       {/* Right panel */}
       <div
         className="flex flex-col w-full md:w-80 lg:w-96 p-6 gap-4 shrink-0"
-        style={{ background: 'var(--card)', borderLeft: '1px solid var(--border-light)' }}
+        style={{ background: 'var(--card)', borderLeft: '1px solid var(--border)' }}
       >
         {method === 'cash' ? (
           <>
             <div>
-              <p className="font-display font-bold text-xl mb-4" style={{ color: 'var(--text)' }}>Cash drawer</p>
+              <p className="font-bold text-xl mb-4" style={{ color: 'var(--foreground)' }}>Cash drawer</p>
 
               <div className="space-y-2 mb-4">
                 <div className="flex justify-between text-sm">
-                  <span style={{ color: 'var(--text-muted)' }}>Owed</span>
-                  <span style={{ color: 'var(--text)' }}>฿{total}</span>
+                  <span style={{ color: 'var(--muted-foreground)' }}>Owed</span>
+                  <span style={{ color: 'var(--foreground)' }}>฿{total}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span style={{ color: 'var(--text-muted)' }}>Received</span>
-                  <span style={{ color: 'var(--text)' }}>{received !== null ? `฿${received}` : '—'}</span>
+                  <span style={{ color: 'var(--muted-foreground)' }}>Received</span>
+                  <span style={{ color: 'var(--foreground)' }}>{received !== null ? `฿${received}` : '—'}</span>
                 </div>
-                <hr style={{ borderColor: 'var(--border-light)' }} />
+                <hr style={{ borderColor: 'var(--border)' }} />
                 <div className="flex justify-between text-sm font-semibold">
-                  <span style={{ color: 'var(--text-muted)' }}>Change</span>
-                  <span style={{ color: change !== null && change >= 0 ? 'var(--accent)' : 'var(--destructive)' }}>
+                  <span style={{ color: 'var(--muted-foreground)' }}>Change</span>
+                  <span style={{ color: change !== null && change >= 0 ? 'oklch(0.527 0.154 150)' : 'var(--destructive)' }}>
                     {change !== null ? `฿${change}` : '฿—'}
                   </span>
                 </div>
               </div>
 
-              <p className="text-xs mb-2" style={{ color: 'var(--text-muted)' }}>Quick cash</p>
+              <p className="text-xs mb-2" style={{ color: 'var(--muted-foreground)' }}>Quick cash</p>
               <div className="grid grid-cols-3 gap-2 mb-4">
                 {quickOptions.map((amt) => (
                   <button
@@ -206,9 +206,9 @@ export default function PaymentPage() {
                     onClick={() => setReceived(amt)}
                     className="py-2.5 rounded-xl text-sm font-semibold border"
                     style={{
-                      background: received === amt ? 'var(--text)' : 'var(--bg)',
-                      color: received === amt ? '#fff' : 'var(--text)',
-                      borderColor: received === amt ? 'var(--text)' : 'var(--border)',
+                      background: received === amt ? 'var(--primary)' : 'var(--background)',
+                      color: received === amt ? 'var(--primary-foreground)' : 'var(--foreground)',
+                      borderColor: received === amt ? 'var(--primary)' : 'var(--border)',
                     }}
                   >
                     ฿{amt.toLocaleString()}
@@ -221,12 +221,16 @@ export default function PaymentPage() {
               <button
                 onClick={handleConfirm}
                 disabled={submitting || received === null || change === null || change < 0}
-                className="w-full py-3.5 rounded-xl text-sm font-semibold text-white"
+                className="w-full py-3.5 rounded-xl text-sm font-semibold"
                 style={{
                   background:
                     !submitting && received !== null && change !== null && change >= 0
-                      ? 'var(--accent)'
-                      : 'var(--border)',
+                      ? 'var(--primary)'
+                      : 'var(--muted)',
+                  color:
+                    !submitting && received !== null && change !== null && change >= 0
+                      ? 'var(--primary-foreground)'
+                      : 'var(--muted-foreground)',
                   cursor:
                     !submitting && received !== null && change !== null && change >= 0
                       ? 'pointer'
@@ -238,7 +242,7 @@ export default function PaymentPage() {
               <button
                 onClick={handleCancel}
                 className="w-full py-2.5 text-sm"
-                style={{ color: 'var(--text-muted)' }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 Cancel
               </button>
@@ -247,10 +251,10 @@ export default function PaymentPage() {
         ) : (
           <>
             <div className="flex-1">
-              <p className="font-display font-bold text-xl mb-4" style={{ color: 'var(--text)' }}>Card payment</p>
-              <p className="text-sm mb-2" style={{ color: 'var(--text-muted)' }}>Amount to charge</p>
-              <p className="font-display font-bold text-4xl" style={{ color: 'var(--text)' }}>฿{total}</p>
-              <p className="text-xs mt-4 p-3 rounded-xl" style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)' }}>
+              <p className="font-bold text-xl mb-4" style={{ color: 'var(--foreground)' }}>Card payment</p>
+              <p className="text-sm mb-2" style={{ color: 'var(--muted-foreground)' }}>Amount to charge</p>
+              <p className="font-bold text-4xl" style={{ color: 'var(--foreground)' }}>฿{total}</p>
+              <p className="text-xs mt-4 p-3 rounded-xl" style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}>
                 Present the card reader to the customer, then tap Confirm once payment is processed.
               </p>
             </div>
@@ -258,15 +262,19 @@ export default function PaymentPage() {
               <button
                 onClick={handleConfirm}
                 disabled={submitting}
-                className="w-full py-3.5 rounded-xl text-sm font-semibold text-white"
-                style={{ background: submitting ? 'var(--border)' : 'var(--accent)', cursor: submitting ? 'not-allowed' : 'pointer' }}
+                className="w-full py-3.5 rounded-xl text-sm font-semibold"
+                style={{
+                  background: submitting ? 'var(--muted)' : 'var(--primary)',
+                  color: submitting ? 'var(--muted-foreground)' : 'var(--primary-foreground)',
+                  cursor: submitting ? 'not-allowed' : 'pointer',
+                }}
               >
                 {submitting ? 'Processing…' : 'Confirm'}
               </button>
               <button
                 onClick={handleCancel}
                 className="w-full py-2.5 text-sm"
-                style={{ color: 'var(--text-muted)' }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 Cancel
               </button>

@@ -21,9 +21,9 @@ export function CategoryTabs({ active, search, onCategoryChange, onSearchChange 
             onClick={() => onCategoryChange(cat)}
             className="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap"
             style={{
-              background: active === cat ? 'var(--text)' : 'var(--card)',
-              color: active === cat ? '#fff' : 'var(--text)',
-              border: `1px solid ${active === cat ? 'var(--text)' : 'var(--border)'}`,
+              background: active === cat ? 'var(--primary)' : 'var(--card)',
+              color: active === cat ? 'var(--primary-foreground)' : 'var(--foreground)',
+              border: `1px solid ${active === cat ? 'var(--primary)' : 'var(--border)'}`,
             }}
           >
             {cat}
@@ -39,7 +39,7 @@ export function CategoryTabs({ active, search, onCategoryChange, onSearchChange 
         style={{
           background: 'var(--card)',
           border: `1px solid var(--border)`,
-          color: 'var(--text)',
+          color: 'var(--foreground)',
         }}
       />
     </div>

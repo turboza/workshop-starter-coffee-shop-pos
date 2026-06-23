@@ -128,30 +128,30 @@ export default async function DashboardPage() {
   const rawOrders = orders.map((o) => ({ total: o.total, createdAt: o.timestamp }))
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--bg)' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--background)' }}>
       {/* Sidebar */}
       <aside
         className="hidden md:flex flex-col w-48 lg:w-56 shrink-0 p-4 gap-6"
-        style={{ background: 'var(--card)', borderRight: '1px solid var(--border-light)' }}
+        style={{ background: 'var(--card)', borderRight: '1px solid var(--border)' }}
       >
         {/* Brand */}
         <div className="pt-2">
-          <h1 className="font-display font-bold text-xl" style={{ color: 'var(--text)' }}>
+          <h1 className="font-bold text-xl" style={{ color: 'var(--foreground)' }}>
             Lina&apos;s POS
           </h1>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>Lina · owner</p>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>Lina · owner</p>
         </div>
 
         {/* Nav */}
         <nav className="flex-1">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--text-faint)' }}>
+          <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>
             Operate
           </p>
           <ul className="space-y-1">
             <li>
               <span
                 className="flex items-center px-3 py-2 rounded-lg text-sm font-semibold"
-                style={{ background: 'var(--text)', color: '#fff' }}
+                style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
               >
                 Dashboard
               </span>
@@ -160,7 +160,7 @@ export default async function DashboardPage() {
               <Link
                 href="/users"
                 className="flex items-center px-3 py-2 rounded-lg text-sm"
-                style={{ color: 'var(--text-muted)' }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 Users &amp; roles
               </Link>
@@ -169,7 +169,7 @@ export default async function DashboardPage() {
               <Link
                 href="/"
                 className="flex items-center px-3 py-2 rounded-lg text-sm"
-                style={{ color: 'var(--text-muted)' }}
+                style={{ color: 'var(--muted-foreground)' }}
               >
                 ← Back to till
               </Link>
@@ -178,10 +178,7 @@ export default async function DashboardPage() {
         </nav>
 
         {/* Logout */}
-        <LogoutButton
-          className="flex items-center px-3 py-2 rounded-lg text-sm w-full text-left"
-          style={{ color: 'var(--text-muted)' }}
-        />
+        <LogoutButton />
       </aside>
 
       {/* Main content */}
@@ -194,7 +191,7 @@ export default async function DashboardPage() {
             <Link
               href="/"
               className="md:hidden px-3 py-1 rounded-lg text-xs font-medium"
-              style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)' }}
+              style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}
             >
               ← Till
             </Link>

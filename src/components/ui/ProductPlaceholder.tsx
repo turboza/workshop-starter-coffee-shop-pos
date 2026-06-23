@@ -29,7 +29,7 @@ export function ProductPlaceholder({ name, className = '' }: ProductPlaceholderP
   return (
     <div
       className={`flex items-center justify-center rounded-lg text-4xl font-bold select-none ${className}`}
-      style={{ background: color.bg, color: color.text, fontFamily: 'var(--font-caveat), cursive' }}
+      style={{ background: color.bg, color: color.text }}
     >
       {letter}
     </div>

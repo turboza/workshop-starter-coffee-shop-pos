@@ -15,7 +15,7 @@ interface CustomizeModalProps {
 }
 
 export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
-  const { addItem, orderNumber } = useCart()
+  const { addItem } = useCart()
   const [size, setSize] = useState<SizeOption>('S 12oz')
   const [milk, setMilk] = useState<MilkOption>('Whole')
   const [extras, setExtras] = useState<ExtraOption[]>([])
@@ -67,9 +67,9 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
         onClick={onClick}
         className="px-3 py-1.5 rounded-full text-sm font-medium border"
         style={{
-          background: active ? 'var(--text)' : 'var(--card)',
-          color: active ? '#fff' : 'var(--text)',
-          borderColor: active ? 'var(--text)' : 'var(--border)',
+          background: active ? 'var(--primary)' : 'var(--card)',
+          color: active ? 'var(--primary-foreground)' : 'var(--foreground)',
+          borderColor: active ? 'var(--primary)' : 'var(--border)',
         }}
       >
         {label}
@@ -86,22 +86,22 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
     >
       <div
         className="w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden"
-        style={{ background: 'var(--bg)' }}
+        style={{ background: 'var(--background)' }}
       >
         {/* Header */}
         <div className="px-6 pt-6 pb-4 flex items-start justify-between">
           <div>
-            <h2 className="font-display text-3xl font-bold" style={{ color: 'var(--text)' }}>
+            <h2 className="font-bold text-3xl" style={{ color: 'var(--foreground)' }}>
               {product.name}
             </h2>
-            <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
               Base ฿{product.price}
             </p>
           </div>
           <button
             onClick={onClose}
             className="text-xl leading-none p-1"
-            style={{ color: 'var(--text-muted)' }}
+            style={{ color: 'var(--muted-foreground)' }}
           >
             ×
           </button>
@@ -110,7 +110,7 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
         <div className="px-6 pb-6 space-y-5 max-h-[70vh] overflow-y-auto">
           {/* Cup size */}
           <div>
-            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--text)' }}>Cup size</p>
+            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Cup size</p>
             <div className="flex flex-wrap gap-2">
               {SIZES.map((s) => (
                 <PillButton
@@ -126,7 +126,7 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
 
           {/* Milk */}
           <div>
-            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--text)' }}>Milk</p>
+            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Milk</p>
             <div className="flex flex-wrap gap-2">
               {MILKS.map((m) => (
                 <PillButton
@@ -142,7 +142,7 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
 
           {/* Extras */}
           <div>
-            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--text)' }}>Extras</p>
+            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Extras</p>
             <div className="flex flex-wrap gap-2">
               {EXTRAS.map((e) => (
                 <PillButton
@@ -158,7 +158,7 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
 
           {/* Barista note */}
           <div>
-            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--text)' }}>Note for barista</p>
+            <p className="text-sm font-semibold mb-2" style={{ color: 'var(--foreground)' }}>Note for barista</p>
             <input
               type="text"
               placeholder='e.g. "extra hot"'
@@ -168,23 +168,23 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
               style={{
                 background: 'var(--card)',
                 border: `1.5px dashed var(--border)`,
-                color: 'var(--text)',
+                color: 'var(--foreground)',
               }}
             />
           </div>
 
           {/* Separator */}
-          <hr style={{ borderColor: 'var(--border-light)' }} />
+          <hr style={{ borderColor: 'var(--border)' }} />
 
           {/* Summary + actions */}
           <div className="flex items-center justify-between gap-4">
             <div>
               {summaryParts.length > 0 && (
-                <p className="text-xs mb-1" style={{ color: 'var(--text-muted)' }}>
+                <p className="text-xs mb-1" style={{ color: 'var(--muted-foreground)' }}>
                   {summaryParts.join(' · ')}
                 </p>
               )}
-              <p className="font-display text-3xl font-bold" style={{ color: 'var(--text)' }}>
+              <p className="font-bold text-3xl" style={{ color: 'var(--foreground)' }}>
                 ฿{unitPrice * quantity}
               </p>
             </div>
@@ -194,18 +194,18 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
               <div className="flex items-center gap-2 rounded-xl border px-2 py-1" style={{ borderColor: 'var(--border)' }}>
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-7 h-7 rounded-lg text-lg flex items-center justify-center"
-                  style={{ background: 'var(--bg-subtle)', color: 'var(--text)' }}
+                  className="size-7 rounded-lg text-lg flex items-center justify-center"
+                  style={{ background: 'var(--muted)', color: 'var(--foreground)' }}
                 >
                   −
                 </button>
-                <span className="text-sm font-semibold w-5 text-center" style={{ color: 'var(--text)' }}>
+                <span className="text-sm font-semibold w-5 text-center" style={{ color: 'var(--foreground)' }}>
                   {quantity}
                 </span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-7 h-7 rounded-lg text-lg flex items-center justify-center"
-                  style={{ background: 'var(--bg-subtle)', color: 'var(--text)' }}
+                  className="size-7 rounded-lg text-lg flex items-center justify-center"
+                  style={{ background: 'var(--muted)', color: 'var(--foreground)' }}
                 >
                   +
                 </button>
@@ -214,8 +214,8 @@ export function CustomizeModal({ product, onClose }: CustomizeModalProps) {
               {/* Add button */}
               <button
                 onClick={handleAdd}
-                className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white"
-                style={{ background: 'var(--accent)' }}
+                className="px-5 py-2.5 rounded-xl text-sm font-semibold"
+                style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
               >
                 Add to order
               </button>

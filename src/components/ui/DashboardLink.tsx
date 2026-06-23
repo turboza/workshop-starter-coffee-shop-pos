@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
+import { Button } from '@/components/ui/button'
 
 export function DashboardLink() {
   const [role, setRole] = useState<string | null>(null)
@@ -25,12 +26,8 @@ export function DashboardLink() {
   if (role !== 'manager') return null
 
   return (
-    <Link
-      href="/dashboard"
-      className="px-3 py-1 rounded-lg text-xs font-medium"
-      style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)' }}
-    >
-      Dashboard
-    </Link>
+    <Button variant="outline" size="sm" asChild>
+      <Link href="/dashboard">Dashboard</Link>
+    </Button>
   )
 }

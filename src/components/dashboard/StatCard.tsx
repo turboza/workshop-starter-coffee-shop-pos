@@ -10,22 +10,22 @@ export function StatCard({ label, value, sub, subPositive, sample }: StatCardPro
   return (
     <div
       className="rounded-xl p-4 flex flex-col gap-1"
-      style={{ background: 'var(--card)', border: '1px solid var(--border-light)' }}
+      style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
     >
       <div className="flex items-center gap-2">
-        <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
+        <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--muted-foreground)' }}>
           {label}
         </p>
         {sample && (
           <span
             className="text-xs px-1.5 py-0.5 rounded font-medium"
-            style={{ background: 'var(--accent-light)', color: 'var(--accent-dark)' }}
+            style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}
           >
             sample
           </span>
         )}
       </div>
-      <p className="font-display font-bold text-4xl" style={{ color: 'var(--text)' }}>
+      <p className="font-bold text-4xl" style={{ color: 'var(--foreground)' }}>
         {value}
       </p>
       <p
@@ -33,10 +33,10 @@ export function StatCard({ label, value, sub, subPositive, sample }: StatCardPro
         style={{
           color:
             subPositive === true
-              ? 'var(--success)'
+              ? 'oklch(0.527 0.154 150)'
               : subPositive === false
               ? 'var(--destructive)'
-              : 'var(--text-muted)',
+              : 'var(--muted-foreground)',
         }}
       >
         {sub}
