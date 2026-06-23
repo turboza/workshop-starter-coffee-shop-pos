@@ -12,15 +12,27 @@ function ProductPhoto({ product }: { product: Product }) {
     return <ProductPlaceholder name={product.name} className="w-full aspect-[4/3]" />
   }
 
+  const darkSrc = product.image.replace('/menu/', '/menu-dark/')
+
   return (
     <div className="relative w-full aspect-[4/3]">
+      {/* Light image — shown in light mode, hidden in dark */}
       <Image
         src={product.image}
         alt={product.name}
         fill
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-        className="object-cover"
+        className="object-cover dark:hidden"
         onError={() => setFailed(true)}
+      />
+      {/* Dark image — hidden in light mode, shown in dark */}
+      <Image
+        src={darkSrc}
+        alt=""
+        fill
+        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+        className="object-cover hidden dark:block"
+        aria-hidden
       />
     </div>
   )
@@ -63,7 +75,7 @@ export function ProductGrid({ products, onSelect }: ProductGridProps) {
                 <span
                   className="px-2 py-1 rounded text-xs font-semibold tracking-widest uppercase"
                   style={{
-                    background: 'rgba(255,255,255,0.9)',
+                    background: 'var(--card)',
                     color: 'var(--muted-foreground)',
                     border: '1px solid var(--border)',
                   }}

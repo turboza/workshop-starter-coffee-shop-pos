@@ -16,6 +16,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 import { LogoutButton } from '@/src/components/ui/LogoutButton'
+import { AnimatedThemeToggler } from '@/src/components/theme/AnimatedThemeToggler'
 
 interface Props {
   displayName: string
@@ -121,7 +122,11 @@ export function ManagerSidebar({ displayName, role }: Props) {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-3">
+      <SidebarFooter className="p-3 flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <AnimatedThemeToggler />
+          <span className="text-xs text-muted-foreground">Toggle theme</span>
+        </div>
         <LogoutButton />
       </SidebarFooter>
     </Sidebar>

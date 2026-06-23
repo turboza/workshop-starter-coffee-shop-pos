@@ -11,6 +11,7 @@ import { useCart } from '@/src/context/CartContext'
 import { AccountMenu } from '@/src/components/ui/AccountMenu'
 import { DashboardLink } from '@/src/components/ui/DashboardLink'
 import { DeniedBanner } from '@/src/components/ui/DeniedBanner'
+import { AnimatedThemeToggler } from '@/src/components/theme/AnimatedThemeToggler'
 
 export default function TillPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('Coffee')
@@ -40,6 +41,7 @@ export default function TillPage() {
         </span>
         <div className="flex items-center gap-3">
           <DashboardLink />
+          <AnimatedThemeToggler />
           <AccountMenu />
         </div>
       </header>
