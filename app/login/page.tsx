@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
 import { Button } from '@/components/ui/button'
@@ -91,13 +92,61 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-background px-4">
-      {/* Theme toggle — top right */}
-      <div className="absolute right-4 top-4">
+      {/* Background layer — pinned to the viewport so it never scrolls out from under the overlay */}
+      <div aria-hidden className="fixed inset-0 z-0 overflow-hidden">
+        {/* Background photo — cozy cafe; swaps with theme */}
+        <Image
+          src="/auth/cafe.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="scale-105 object-cover dark:hidden"
+        />
+        <Image
+          src="/auth/cafe-dark.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="hidden scale-105 object-cover dark:block"
+        />
+        {/* Progressive blur — full at bottom-left, fading to crisp at top-right */}
+        <div
+          className="absolute inset-0 backdrop-blur-[1px]"
+          style={{
+            maskImage:
+              'linear-gradient(to top right, black 0%, black 35%, transparent 75%)',
+            WebkitMaskImage:
+              'linear-gradient(to top right, black 0%, black 35%, transparent 75%)',
+          }}
+        />
+        {/* Readability overlay — softens the photo so the card pops.
+            Light: left-weighted cream wash, heavier on the bright window side. */}
+        <div
+          className="absolute inset-0 dark:hidden"
+          style={{
+            background:
+              'linear-gradient(to right, color-mix(in oklch, var(--background) 75%, transparent) 0%, color-mix(in oklch, var(--background) 45%, transparent) 40%, color-mix(in oklch, var(--background) 30%, transparent) 100%)',
+          }}
+        />
+        {/* Dark: stronger wash to keep contrast in the dim evening photo */}
+        <div
+          className="absolute inset-0 hidden dark:block"
+          style={{
+            background:
+              'radial-gradient(120% 100% at 50% 50%, color-mix(in oklch, var(--background) 35%, transparent) 0%, color-mix(in oklch, var(--background) 80%, transparent) 70%)',
+          }}
+        />
+      </div>
+
+      {/* Theme toggle — top right (frosted backdrop so it reads on the bright photo) */}
+      <div className="absolute right-4 top-4 z-10 rounded-md border border-border bg-card/80 p-0.5 shadow-sm backdrop-blur-sm">
         <AnimatedThemeToggler />
       </div>
 
-      <div className="w-full max-w-sm">
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
+      <div className="relative z-10 w-full max-w-sm">
+        <div className="rounded-2xl border border-border bg-card/95 p-8 shadow-xl backdrop-blur-sm">
           {/* Logo / title */}
           <div className="mb-8 text-center">
             <h1 className="mb-1 font-display text-4xl text-foreground">
