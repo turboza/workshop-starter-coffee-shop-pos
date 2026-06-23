@@ -96,7 +96,7 @@ export default function LoginPage() {
       <div aria-hidden className="fixed inset-0 z-0 overflow-hidden">
         {/* Background photo — cozy cafe; swaps with theme */}
         <Image
-          src="/auth/cafe.jpg"
+          src="/auth/cafe-people-v2.jpg"
           alt=""
           fill
           priority
@@ -104,7 +104,7 @@ export default function LoginPage() {
           className="scale-105 object-cover dark:hidden"
         />
         <Image
-          src="/auth/cafe-dark.jpg"
+          src="/auth/cafe-people-dark-v2.jpg"
           alt=""
           fill
           priority
@@ -116,9 +116,9 @@ export default function LoginPage() {
           className="absolute inset-0 backdrop-blur-[1px]"
           style={{
             maskImage:
-              'linear-gradient(to top right, black 0%, black 35%, transparent 75%)',
+              'linear-gradient(to top, black 0%, black 60%, transparent 90%)',
             WebkitMaskImage:
-              'linear-gradient(to top right, black 0%, black 35%, transparent 75%)',
+              'linear-gradient(to top, black 0%, black 60%, transparent 90%)',
           }}
         />
         {/* Readability overlay — softens the photo so the card pops.
