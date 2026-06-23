@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { AnimatedThemeToggler } from '@/src/components/theme/AnimatedThemeToggler'
 
 type Mode = 'signin' | 'signup'
 
@@ -89,7 +90,12 @@ export default function LoginPage() {
   const fieldHeight = 'h-11'
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+    <div className="relative min-h-screen flex items-center justify-center bg-background px-4">
+      {/* Theme toggle — top right */}
+      <div className="absolute right-4 top-4">
+        <AnimatedThemeToggler />
+      </div>
+
       <div className="w-full max-w-sm">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
           {/* Logo / title */}
