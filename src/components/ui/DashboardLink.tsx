@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
 import { TopLoadingBar } from '@/src/components/ui/TopLoadingBar'
-import { buttonVariants } from '@/components/ui/button'
 
 export function DashboardLink() {
   const [role, setRole] = useState<string | null>(null)
@@ -29,11 +28,8 @@ export function DashboardLink() {
   return (
     <Link
       href="/dashboard"
-      className={buttonVariants({
-        variant: 'outline',
-        size: 'sm',
-        className: 'bg-white dark:bg-white dark:text-black dark:hover:bg-white/90',
-      })}
+      className="inline-flex h-7 items-center gap-1 rounded-md px-2.5 text-[0.8rem] font-medium transition-colors hover:bg-accent"
+      style={{ color: 'var(--muted-foreground)', border: '1px solid var(--border)' }}
     >
       <TopLoadingBar />
       Dashboard
