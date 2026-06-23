@@ -1,0 +1,136 @@
+{
+  "_meta": {
+    "purpose": "Source-of-truth prompts for dark-mode menu product images. Same items as public/menu/ but with a moody dark aesthetic. Edit subjects here, then regenerate via the imagegen skill + batch API.",
+    "generator": "node scripts/batch-dark-menu.mjs (Gemini batch API, 50% off standard pricing)",
+    "output": "public/menu-dark/<id>.jpg — square 1K JPEG",
+    "model_notes": "gemini-3.1-flash-image via Gemini Batch API"
+  },
+  "shared": {
+    "style": "Photorealistic moody café product photography. Dramatic chiaroscuro lighting, deep shadows, very dark background.",
+    "backdrop": "Dark wooden surface with visible grain. Very dim warm amber bokeh lights barely visible in the background. Almost black surroundings.",
+    "composition": "Subject fills 70% of the frame and is clearly lit from above. Square 1:1 composition at 1K resolution.",
+    "constraints": "No logos, no text, no watermark, no hands, no people. Shallow depth of field."
+  },
+  "items": {
+    "latte": {
+      "name": "Latte",
+      "subject": "A beautifully crafted latte in a white ceramic cup with delicate latte art rosette pattern, steam rising gently. Cup fills approximately 70% of the frame."
+    },
+    "iced-latte": {
+      "name": "Iced Latte",
+      "subject": "A tall glass of iced latte with ice cubes, caramel-toned espresso swirling through cold milk, topped with a thin foam layer."
+    },
+    "americano": {
+      "name": "Americano",
+      "subject": "A small white ceramic cup of hot americano, deep black coffee with a thin golden crema layer on top, steam rising."
+    },
+    "iced-americano": {
+      "name": "Iced Americano",
+      "subject": "A tall glass of iced americano with large ice cubes and deep black coffee, condensation on the outside of the glass."
+    },
+    "cappuccino": {
+      "name": "Cappuccino",
+      "subject": "A cappuccino in a white ceramic cup with a thick dome of velvety foam and a light dusting of cocoa powder on top."
+    },
+    "mocha": {
+      "name": "Mocha",
+      "subject": "A mocha in a white ceramic cup with rich chocolate and espresso layered beneath thick steamed milk, topped with cocoa dust."
+    },
+    "espresso": {
+      "name": "Espresso",
+      "subject": "A small white espresso cup with a double shot of espresso, dark rich liquid with a golden-red crema, on a small saucer."
+    },
+    "flat-white": {
+      "name": "Flat White",
+      "subject": "A flat white in a small white ceramic tulip cup with smooth microfoam and a simple tulip latte art pattern."
+    },
+    "sig-latte": {
+      "name": "Signature Latte",
+      "subject": "A signature latte in a white ceramic cup with intricate rosette latte art and a hint of golden syrup drizzle on top."
+    },
+    "matcha-latte": {
+      "name": "Matcha Latte",
+      "subject": "A matcha latte in a white ceramic cup with vibrant green matcha swirled into steamed milk, creating a beautiful gradient."
+    },
+    "thai-tea": {
+      "name": "Thai Milk Tea",
+      "subject": "A glass of Thai milk tea with vivid orange-amber tea layered over thick condensed milk, ice cubes visible, bright color."
+    },
+    "oolong": {
+      "name": "Oolong Latte",
+      "subject": "A cup of oolong latte with golden-brown tea and steamed oat milk, subtle earthy tones, light foam on top."
+    },
+    "chamomile": {
+      "name": "Chamomile",
+      "subject": "A clear glass mug of chamomile tea with golden yellow liquid, dried chamomile flowers floating, soft steam rising."
+    },
+    "jasmine-green": {
+      "name": "Jasmine Green",
+      "subject": "A delicate cup of jasmine green tea with pale golden-green liquid, small jasmine flower petals floating on the surface."
+    },
+    "earl-grey": {
+      "name": "Earl Grey Latte",
+      "subject": "An earl grey latte in a white cup with purple-grey steamed milk and a dried bergamot slice or lavender sprig garnish."
+    },
+    "croissant": {
+      "name": "Croissant",
+      "subject": "A golden flaky croissant on a small dark ceramic plate, freshly baked with crispy laminated layers and golden-brown crust."
+    },
+    "pain-au-choc": {
+      "name": "Pain au choc",
+      "subject": "A pain au chocolat on a dark ceramic plate, golden pastry with visible chocolate filling peeking from the ends."
+    },
+    "banana-bread": {
+      "name": "Banana Bread",
+      "subject": "A thick slice of moist banana bread on a dark ceramic plate, golden-brown crust with visible banana bits inside."
+    },
+    "muffin": {
+      "name": "Muffin",
+      "subject": "A blueberry muffin with a domed golden top and crumb topping on a dark ceramic plate, blueberries visible in the cake."
+    },
+    "kouign-amann": {
+      "name": "Kouign-amann",
+      "subject": "A kouign-amann pastry on a dark ceramic plate, caramelized golden-brown sugar crust with flaky buttery layers."
+    },
+    "lemonade": {
+      "name": "Lemonade",
+      "subject": "A tall glass of fresh lemonade with ice cubes, bright yellow liquid, a lemon slice on the rim, condensation on the glass."
+    },
+    "sparkling": {
+      "name": "Sparkling Water",
+      "subject": "A glass of sparkling water with ice, tiny bubbles rising through crystal clear water, a lemon wedge on the side."
+    },
+    "fresh-orange": {
+      "name": "Orange Juice",
+      "subject": "A glass of freshly squeezed orange juice, vivid orange color, small pulp bits visible, condensation on the glass."
+    },
+    "cold-brew": {
+      "name": "Cold Brew",
+      "subject": "A jar or glass of cold brew coffee with ice, very dark concentrated coffee, a paper straw, condensation on glass."
+    },
+    "iced-matcha": {
+      "name": "Iced Matcha",
+      "subject": "A tall glass of iced matcha latte, vibrant green matcha over ice and milk creating a beautiful gradient from green to white."
+    },
+    "dalgona-coffee": {
+      "name": "Dalgona Coffee",
+      "subject": "A dalgona coffee in a clear glass, creamy whipped coffee foam on top of cold milk, coffee swirl pattern on the foam."
+    },
+    "brown-sugar-latte": {
+      "name": "Brown Sugar Latte",
+      "subject": "A brown sugar latte with caramel-brown sugar syrup drizzled on the inside of the glass, espresso poured over ice and milk."
+    },
+    "lavender-latte": {
+      "name": "Lavender Latte",
+      "subject": "A lavender latte in a white ceramic cup, light purple-tinted steamed milk with a fresh lavender sprig garnish on top."
+    },
+    "hojicha-latte": {
+      "name": "Hojicha Latte",
+      "subject": "A hojicha latte in a white ceramic cup, warm caramel-brown roasted green tea latte with smooth steamed milk."
+    },
+    "rose-oat-latte": {
+      "name": "Rose Oat Latte",
+      "subject": "A rose oat latte in a white ceramic cup, pale pink latte with a dried rose petal garnish and smooth oat milk foam."
+    }
+  }
+}
