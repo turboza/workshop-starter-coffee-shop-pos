@@ -33,7 +33,7 @@ export default function TillPage() {
       {/* Top bar */}
       <header
         className="flex items-center justify-between px-4 py-2 text-xs shrink-0"
-        style={{ background: 'var(--background)', borderBottom: '1px solid var(--border)' }}
+        style={{ background: 'var(--card)', borderBottom: '1px solid var(--border)' }}
       >
         <span style={{ color: 'var(--muted-foreground)' }}>
           {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · Lina&apos;s POS
