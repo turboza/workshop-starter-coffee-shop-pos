@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { Suspense } from 'react'
-import { SidebarTrigger } from '@/components/ui/sidebar'
+import { MobilePageHeader } from '@/src/components/ui/MobilePageHeader'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { UsersData } from './UsersData'
@@ -10,13 +10,7 @@ import { UsersSkeleton } from './UsersSkeleton'
 export default function UsersPage() {
   return (
     <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
-      <header
-        className="md:hidden sticky top-0 z-10 flex items-center gap-2 -mx-4 -mt-4 px-4 pt-4 pb-2 mb-1 border-b"
-        style={{ background: 'var(--background)', borderColor: 'var(--border)' }}
-      >
-        <SidebarTrigger />
-        <span className="font-bold" style={{ color: 'var(--foreground)' }}>Users &amp; roles</span>
-      </header>
+      <MobilePageHeader title="Users & roles" />
 
       <div>
         <p className="text-xs mb-1" style={{ color: 'var(--muted-foreground)' }}>
