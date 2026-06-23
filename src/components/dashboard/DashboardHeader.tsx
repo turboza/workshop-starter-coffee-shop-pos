@@ -35,7 +35,7 @@ export function DashboardHeader() {
 
   return (
     <div>
-      <h2 className="font-bold text-3xl" style={{ color: 'var(--foreground)' }}>
+      <h2 className="font-bold text-2xl md:text-3xl" style={{ color: 'var(--foreground)' }}>
         {greeting}{name ? `, ${name}` : ''}
       </h2>
       <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>

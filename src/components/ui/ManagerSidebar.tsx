@@ -66,7 +66,7 @@ export function ManagerSidebar({ displayName, role }: Props) {
   const pathname = usePathname()
 
   return (
-    <Sidebar collapsible="none" className="h-screen border-r border-border">
+    <Sidebar collapsible="offcanvas" className="h-screen border-r border-border">
       <SidebarHeader className="p-4 gap-3">
         <div>
           <p className="font-bold text-xl text-foreground">Lina&apos;s POS</p>

@@ -25,7 +25,7 @@ export function StatCard({ label, value, sub, subPositive, sample }: StatCardPro
           </span>
         )}
       </div>
-      <p className="font-bold text-4xl" style={{ color: 'var(--foreground)' }}>
+      <p className="font-bold text-3xl md:text-4xl" style={{ color: 'var(--foreground)' }}>
         {value}
       </p>
       <p

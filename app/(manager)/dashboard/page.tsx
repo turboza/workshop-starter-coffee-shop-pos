@@ -7,6 +7,7 @@ import { LiveFeed } from '@/src/components/dashboard/LiveFeed'
 import { DashboardLive } from '@/src/components/dashboard/DashboardLive'
 import { DashboardHeader } from '@/src/components/dashboard/DashboardHeader'
 import { createSupabaseServerClient } from '@/src/lib/supabase-server'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 import { Order } from '@/src/types'
 
 type RawItem = { productName: string; quantity: number; createdAt: string }
@@ -114,7 +115,17 @@ export default async function DashboardPage() {
 
   return (
     <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-5">
-      <div className="flex items-start justify-between">
+      {/* Mobile-only top bar — holds sidebar trigger so nav is reachable on phones */}
+      <header
+        className="md:hidden sticky top-0 z-10 flex items-center gap-2 -mx-4 px-4 py-2 mb-1 border-b backdrop-blur"
+        style={{ background: 'var(--background)', borderColor: 'var(--border)' }}
+      >
+        <SidebarTrigger />
+        <span className="font-bold" style={{ color: 'var(--foreground)' }}>Dashboard</span>
+      </header>
+      {/* TODO: same mobile trigger needed on other manager pages (inventory, users) */}
+
+      <div className="flex flex-wrap items-start justify-between gap-2">
         <DashboardHeader />
         <div className="flex items-center gap-2">
           <Badge variant="live" />

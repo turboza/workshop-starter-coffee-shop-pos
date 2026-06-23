@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { createSupabaseServerClient } from '@/src/lib/supabase-server'
 import { UsersTable } from '@/src/components/users/UsersTable'
+import { SidebarTrigger } from '@/components/ui/sidebar'
 
 export default async function UsersPage() {
   const supabase = await createSupabaseServerClient()
@@ -13,7 +14,14 @@ export default async function UsersPage() {
     .order('created_at', { ascending: true })
 
   return (
-    <main className="flex-1 overflow-y-auto p-6 space-y-6">
+    <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+      <header
+        className="md:hidden sticky top-0 z-10 flex items-center gap-2 -mx-4 px-4 py-2 mb-1 border-b backdrop-blur"
+        style={{ background: 'var(--background)', borderColor: 'var(--border)' }}
+      >
+        <SidebarTrigger />
+        <span className="font-bold" style={{ color: 'var(--foreground)' }}>Users &amp; roles</span>
+      </header>
       <div>
         <p className="text-xs mb-1" style={{ color: 'var(--muted-foreground)' }}>
           System / Users &amp; roles

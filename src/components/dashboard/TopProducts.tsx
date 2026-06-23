@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 type Period = 'TODAY' | 'WEEK' | 'MONTH'
 type Item = { rank: number; name: string; count: number }
@@ -47,25 +48,21 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
       className="rounded-xl p-5"
       style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
     >
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
         <h3 className="font-bold text-xl" style={{ color: 'var(--foreground)' }}>
           Top products
         </h3>
-        <div className="flex gap-1 rounded-lg overflow-hidden border" style={{ borderColor: 'var(--border)' }}>
-          {(['TODAY', 'WEEK', 'MONTH'] as Period[]).map((p) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              className="px-3 py-1 text-xs font-semibold"
-              style={{
-                background: period === p ? 'var(--primary)' : 'transparent',
-                color: period === p ? 'var(--primary-foreground)' : 'var(--muted-foreground)',
-              }}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
+        <ToggleGroup
+          value={[period]}
+          onValueChange={(vals) => { if (vals.length > 0) setPeriod(vals[vals.length - 1] as Period) }}
+          variant="outline"
+          size="sm"
+          spacing={0}
+        >
+          <ToggleGroupItem value="TODAY">Today</ToggleGroupItem>
+          <ToggleGroupItem value="WEEK">Week</ToggleGroupItem>
+          <ToggleGroupItem value="MONTH">Month</ToggleGroupItem>
+        </ToggleGroup>
       </div>
 
       {items.length === 0 ? (
@@ -79,10 +76,10 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
               <span className="text-sm w-4 shrink-0" style={{ color: 'var(--muted-foreground)' }}>
                 {item.rank}
               </span>
-              <span className="text-sm font-medium w-28 shrink-0" style={{ color: 'var(--foreground)' }}>
+              <span className="text-sm font-medium min-w-0 flex-1 truncate" style={{ color: 'var(--foreground)' }}>
                 {item.name}
               </span>
-              <div className="flex-1 h-3 rounded-full overflow-hidden" style={{ background: 'var(--muted)' }}>
+              <div className="w-20 sm:w-32 md:flex-1 h-3 rounded-full overflow-hidden shrink-0" style={{ background: 'var(--muted)' }}>
                 <div
                   className="h-full rounded-full"
                   style={{

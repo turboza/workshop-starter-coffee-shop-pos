@@ -39,7 +39,6 @@ export default function TillPage() {
           {new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · Lina&apos;s POS
         </span>
         <div className="flex items-center gap-3">
-          <span style={{ color: 'var(--muted-foreground)' }}>TABLET · iPad</span>
           <DashboardLink />
           <AccountMenu />
         </div>
