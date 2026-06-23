@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 type Mode = 'signin' | 'signup'
 
@@ -15,10 +16,10 @@ function passwordStrength(pw: string): { score: number; label: string; color: st
   if (/[A-Z]/.test(pw)) score++
   if (/[0-9]/.test(pw)) score++
   if (/[^A-Za-z0-9]/.test(pw)) score++
-  if (score <= 1) return { score, label: 'Weak', color: '#DC2626' }
-  if (score <= 2) return { score, label: 'Fair', color: '#D97706' }
-  if (score <= 3) return { score, label: 'Good', color: '#2563EB' }
-  return { score, label: 'Strong', color: '#16A34A' }
+  if (score <= 1) return { score, label: 'Weak', color: 'var(--destructive)' }
+  if (score <= 2) return { score, label: 'Fair', color: 'var(--warning)' }
+  if (score <= 3) return { score, label: 'Good', color: 'var(--primary)' }
+  return { score, label: 'Strong', color: 'var(--success)' }
 }
 
 export default function LoginPage() {
@@ -85,180 +86,189 @@ export default function LoginPage() {
     setShowPassword(false)
   }
 
-  const inputStyle = {
-    border: '1px solid var(--border)',
-    background: 'var(--card)',
-    color: 'var(--foreground)',
-  }
+  const fieldHeight = 'h-11'
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: 'var(--background)' }}
-    >
-      <div
-        className="w-full max-w-sm rounded-2xl shadow-sm p-8"
-        style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
-      >
-        {/* Logo / title */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-1" style={{ color: 'var(--foreground)' }}>
-            Lina&apos;s Coffee
-          </h1>
-          <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
-            Point of Sale
-          </p>
-        </div>
-
-        {/* Mode tabs */}
-        <div className="flex rounded-xl p-1 mb-6" style={{ background: 'var(--muted)' }}>
-          {(['signin', 'signup'] as Mode[]).map((m) => (
-            <button
-              key={m}
-              onClick={() => switchMode(m)}
-              className="flex-1 py-2 rounded-lg text-sm font-medium transition-colors"
-              style={
-                mode === m
-                  ? { background: 'var(--card)', color: 'var(--foreground)', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
-                  : { color: 'var(--muted-foreground)' }
-              }
-            >
-              {m === 'signin' ? 'Sign in' : 'Sign up'}
-            </button>
-          ))}
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
-          {/* Name — sign up only */}
-          {mode === 'signup' && (
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
-                Name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Aey"
-                className="w-full px-3 py-2.5 rounded-xl text-sm outline-none"
-                style={inputStyle}
-              />
-            </div>
-          )}
-
-          {/* Email */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
-              Email
-            </label>
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full px-3 py-2.5 rounded-xl text-sm outline-none"
-              style={inputStyle}
-            />
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="w-full max-w-sm">
+        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
+          {/* Logo / title */}
+          <div className="mb-8 text-center">
+            <h1 className="mb-1 font-display text-4xl text-foreground">
+              Lina&apos;s Coffee
+            </h1>
+            <p className="text-sm text-muted-foreground">Point of Sale</p>
           </div>
 
-          {/* Password */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
-              Password
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-3 py-2.5 pr-10 rounded-xl text-sm outline-none"
-                style={inputStyle}
-              />
+          {/* Mode tabs */}
+          <div className="mb-6 flex rounded-xl bg-muted p-1">
+            {(['signin', 'signup'] as Mode[]).map((m) => (
               <button
+                key={m}
                 type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs"
-                style={{ color: 'var(--muted-foreground)' }}
+                onClick={() => switchMode(m)}
+                className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
+                  mode === m
+                    ? 'bg-card text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
               >
-                {showPassword ? 'Hide' : 'Show'}
+                {m === 'signin' ? 'Sign in' : 'Sign up'}
               </button>
-            </div>
+            ))}
+          </div>
 
-            {/* Password strength bar — sign up only */}
-            {mode === 'signup' && password.length > 0 && (
-              <div className="flex items-center gap-2 mt-1">
-                <div className="flex gap-1 flex-1">
-                  {[1, 2, 3, 4].map((seg) => (
-                    <div
-                      key={seg}
-                      className="h-1.5 flex-1 rounded-full transition-colors"
-                      style={{
-                        background: strength.score >= seg ? strength.color : 'var(--border)',
-                      }}
-                    />
-                  ))}
-                </div>
-                <span className="text-xs font-medium w-12 text-right" style={{ color: strength.color }}>
-                  {strength.label}
-                </span>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            {/* Name — sign up only */}
+            {mode === 'signup' && (
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="name" className="text-sm font-medium text-foreground">
+                  Name
+                </label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Aey"
+                  className={fieldHeight}
+                />
               </div>
             )}
-          </div>
 
-          {/* Confirm password — sign up only */}
-          {mode === 'signup' && (
+            {/* Email */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
-                Confirm password
+              <label htmlFor="email" className="text-sm font-medium text-foreground">
+                Email
               </label>
-              <input
-                type={showPassword ? 'text' : 'password'}
+              <Input
+                id="email"
+                type="email"
                 required
-                value={confirm}
-                onChange={(e) => setConfirm(e.target.value)}
-                placeholder="••••••••"
-                className="w-full px-3 py-2.5 rounded-xl text-sm outline-none"
-                style={{
-                  ...inputStyle,
-                  borderColor: confirmMismatch ? '#DC2626' : 'var(--border)',
-                }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className={fieldHeight}
               />
-              {confirmMismatch && (
-                <p className="text-xs" style={{ color: '#DC2626' }}>
-                  Passwords don&apos;t match
-                </p>
+            </div>
+
+            {/* Password */}
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="password" className="text-sm font-medium text-foreground">
+                Password
+              </label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className={`${fieldHeight} pr-14`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-muted-foreground hover:text-foreground"
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
+
+              {/* Password strength bar — sign up only */}
+              {mode === 'signup' && password.length > 0 && (
+                <div className="mt-1 flex items-center gap-2">
+                  <div className="flex flex-1 gap-1">
+                    {[1, 2, 3, 4].map((seg) => (
+                      <div
+                        key={seg}
+                        className="h-1.5 flex-1 rounded-full transition-colors"
+                        style={{
+                          background: strength.score >= seg ? strength.color : 'var(--border)',
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span
+                    className="w-12 text-right text-xs font-medium"
+                    style={{ color: strength.color }}
+                  >
+                    {strength.label}
+                  </span>
+                </div>
               )}
             </div>
-          )}
 
-          {error && (
-            <p className="text-sm rounded-xl px-3 py-2.5" style={{ background: '#FEF2F2', color: 'var(--destructive)' }}>
-              {error}
-            </p>
-          )}
+            {/* Confirm password — sign up only */}
+            {mode === 'signup' && (
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="confirm" className="text-sm font-medium text-foreground">
+                  Confirm password
+                </label>
+                <Input
+                  id="confirm"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  placeholder="••••••••"
+                  aria-invalid={confirmMismatch}
+                  className={fieldHeight}
+                />
+                {confirmMismatch && (
+                  <p className="text-xs text-destructive">Passwords don&apos;t match</p>
+                )}
+              </div>
+            )}
 
-          {success && (
-            <p className="text-sm rounded-xl px-3 py-2.5" style={{ background: 'var(--muted)', color: 'oklch(0.527 0.154 150)' }}>
-              {success}
-            </p>
-          )}
+            {error && (
+              <p className="rounded-xl bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
+                {error}
+              </p>
+            )}
 
-          <Button
-            type="submit"
-            disabled={loading || confirmMismatch}
-            className="w-full"
-          >
-            {loading
-              ? mode === 'signin' ? 'Signing in…' : 'Creating account…'
-              : mode === 'signin' ? 'Sign in' : 'Create account'}
-          </Button>
-        </form>
+            {success && (
+              <p className="rounded-xl bg-success/10 px-3 py-2.5 text-sm text-success">
+                {success}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              size="lg"
+              disabled={loading || confirmMismatch}
+              className={`w-full ${fieldHeight}`}
+            >
+              {loading
+                ? mode === 'signin'
+                  ? 'Signing in…'
+                  : 'Creating account…'
+                : mode === 'signin'
+                  ? 'Sign in'
+                  : 'Create account'}
+            </Button>
+          </form>
+        </div>
+
+        {/* Test credentials — for reviewers trying the app */}
+        <div className="mt-4 rounded-xl border border-dashed border-border bg-muted/40 px-4 py-3">
+          <p className="mb-1.5 text-xs font-medium text-muted-foreground">
+            Test logins (password: coffee)
+          </p>
+          <dl className="space-y-0.5 text-xs text-muted-foreground">
+            <div className="flex justify-between gap-2">
+              <dt>Manager</dt>
+              <dd className="font-mono text-foreground">manager@example.com</dd>
+            </div>
+            <div className="flex justify-between gap-2">
+              <dt>Cashier</dt>
+              <dd className="font-mono text-foreground">cashier@example.com</dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </div>
   )

@@ -3,6 +3,8 @@ export const dynamic = 'force-dynamic'
 import { createSupabaseServerClient } from '@/src/lib/supabase-server'
 import { UsersTable } from '@/src/components/users/UsersTable'
 import { SidebarTrigger } from '@/components/ui/sidebar'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 
 export default async function UsersPage() {
   const supabase = await createSupabaseServerClient()
@@ -26,7 +28,7 @@ export default async function UsersPage() {
         <p className="text-xs mb-1" style={{ color: 'var(--muted-foreground)' }}>
           System / Users &amp; roles
         </p>
-        <h1 className="font-bold text-3xl" style={{ color: 'var(--foreground)' }}>
+        <h1 className="font-bold text-2xl md:text-3xl" style={{ color: 'var(--foreground)' }}>
           Users &amp; roles
         </h1>
         <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>
@@ -35,25 +37,24 @@ export default async function UsersPage() {
       </div>
 
       {/* Roles legend */}
-      <div
-        className="rounded-2xl p-5 space-y-3"
-        style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
-      >
-        <h2 className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>Roles &amp; permissions</h2>
-        <div className="space-y-2">
-          {[
-            { role: 'Manager', perms: 'Till · Dashboard · Users & roles' },
-            { role: 'Cashier', perms: 'Till only' },
-          ].map(({ role, perms }) => (
-            <div key={role} className="flex items-center justify-between">
-              <div>
-                <span className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>{role}</span>
-                <span className="text-xs ml-2" style={{ color: 'var(--muted-foreground)' }}>{perms}</span>
+      <Card>
+        <CardHeader>
+          <CardTitle>Roles &amp; permissions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col gap-2">
+            {[
+              { role: 'Manager', perms: 'Till · Dashboard · Users & roles', variant: 'default' as const },
+              { role: 'Cashier', perms: 'Till only', variant: 'secondary' as const },
+            ].map(({ role, perms, variant }) => (
+              <div key={role} className="flex items-center gap-2">
+                <Badge variant={variant}>{role}</Badge>
+                <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{perms}</span>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Users table */}
       <UsersTable profiles={profiles ?? []} currentUserId={user!.id} />

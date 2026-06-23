@@ -1,8 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createSupabaseBrowserClient } from '@/src/lib/supabase-browser'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table'
 
 type Profile = {
   id: string
@@ -12,23 +29,33 @@ type Profile = {
   created_at: string
 }
 
-function RoleModal({
+function RoleDialog({
   target,
   currentUserId,
-  onClose,
+  open,
+  onOpenChange,
   onSaved,
 }: {
-  target: Profile
+  target: Profile | null
   currentUserId: string
-  onClose: () => void
+  open: boolean
+  onOpenChange: (open: boolean) => void
   onSaved: () => void
 }) {
-  const [selected, setSelected] = useState<'cashier' | 'manager'>(target.role as 'cashier' | 'manager')
+  const [selected, setSelected] = useState<'cashier' | 'manager'>('cashier')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  useEffect(() => {
+    if (open && target) {
+      setSelected(target.role as 'cashier' | 'manager')
+      setError(null)
+    }
+  }, [open, target?.id])
+
   async function handleSave() {
-    if (selected === target.role) { onClose(); return }
+    if (!target) return
+    if (selected === target.role) { onOpenChange(false); return }
 
     if (target.id === currentUserId && selected === 'cashier') {
       const ok = confirm("You'll lose manager access after this change. Continue?")
@@ -54,25 +81,17 @@ function RoleModal({
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'rgba(0,0,0,0.35)' }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
-    >
-      <div
-        className="w-80 rounded-2xl p-6 space-y-5 shadow-xl"
-        style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
-      >
-        {/* Header */}
-        <div>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent showCloseButton={false} className="max-w-sm">
+        <DialogHeader>
           <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>Change role for</p>
-          <p className="text-sm font-semibold mt-0.5" style={{ color: 'var(--foreground)' }}>
-            {target.name ?? target.email}
-          </p>
-        </div>
+          <DialogTitle className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
+            {target?.name ?? target?.email}
+          </DialogTitle>
+        </DialogHeader>
 
         {/* Role options */}
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           {(['manager', 'cashier'] as const).map((r) => (
             <button
               key={r}
@@ -118,27 +137,21 @@ function RoleModal({
           <p className="text-xs px-1" style={{ color: 'var(--destructive)' }}>{error}</p>
         )}
 
-        {/* Actions */}
-        <div className="flex gap-2 pt-1">
-          <button
-            onClick={onClose}
-            className="flex-1 py-2 rounded-xl text-sm font-medium"
-            style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}
-          >
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
             Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={busy}
-            className="flex-1 py-2 rounded-xl text-sm font-semibold"
-            style={{ background: 'var(--primary)', color: 'var(--primary-foreground)', opacity: busy ? 0.6 : 1 }}
-          >
+          </Button>
+          <Button onClick={handleSave} disabled={busy} className="flex-1">
             {busy ? 'Saving…' : 'Save'}
-          </button>
+          </Button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
 function UserGroup({ label, profiles, currentUserId, onEdit }: {
@@ -151,7 +164,6 @@ function UserGroup({ label, profiles, currentUserId, onEdit }: {
 
   return (
     <div>
-      {/* Group label */}
       <p
         className="text-xs font-semibold tracking-widest uppercase px-1 mb-2"
         style={{ color: 'var(--muted-foreground)' }}
@@ -159,75 +171,88 @@ function UserGroup({ label, profiles, currentUserId, onEdit }: {
         {label} · {profiles.length}
       </p>
 
-      <div
-        className="rounded-2xl overflow-hidden"
-        style={{ border: '1px solid var(--border)', background: 'var(--card)' }}
-      >
-        {/* Table header */}
-        <div
-          className="grid text-xs font-semibold tracking-widest uppercase px-5 py-3"
-          style={{
-            gridTemplateColumns: '1fr 1fr 100px 60px',
-            gap: '1rem',
-            color: 'var(--muted-foreground)',
-            borderBottom: '1px solid var(--border)',
-          }}
-        >
-          <span>Name / Email</span>
-          <span>Joined</span>
-          <span>Role</span>
-          <span></span>
-        </div>
+      <Card>
+        {/* Mobile: stacked list (hidden on md+) */}
+        <CardContent className="md:hidden px-0 py-0">
+          {profiles.map((p, i) => (
+            <div
+              key={p.id}
+              className="flex flex-col gap-2 px-5 py-4"
+              style={{ borderTop: i === 0 ? 'none' : '1px solid var(--border)' }}
+            >
+              {/* Name + email row */}
+              <div>
+                <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
+                  {p.name ?? '—'}
+                  {p.id === currentUserId && (
+                    <span className="ml-2 text-xs" style={{ color: 'var(--muted-foreground)' }}>you</span>
+                  )}
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{p.email}</p>
+              </div>
 
-        {profiles.map((p, i) => (
-          <div
-            key={p.id}
-            className="grid items-center px-5 py-4"
-            style={{
-              gridTemplateColumns: '1fr 1fr 100px 60px',
-              gap: '1rem',
-              borderTop: i === 0 ? 'none' : '1px solid var(--border)',
-            }}
-          >
-            {/* Name + email */}
-            <div>
-              <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
-                {p.name ?? '—'}
-                {p.id === currentUserId && (
-                  <span className="ml-2 text-xs" style={{ color: 'var(--muted-foreground)' }}>you</span>
-                )}
-              </p>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{p.email}</p>
+              {/* Date + badge + edit row */}
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                  {formatDate(p.created_at)}
+                </p>
+                <div className="flex items-center gap-2">
+                  <Badge variant={p.role === 'manager' ? 'default' : 'secondary'} className="capitalize">
+                    {p.role}
+                  </Badge>
+                  <Button variant="outline" size="sm" onClick={() => onEdit(p)}>
+                    Edit
+                  </Button>
+                </div>
+              </div>
             </div>
+          ))}
+        </CardContent>
 
-            {/* Joined date */}
-            <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
-              {new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-            </p>
-
-            {/* Role tag */}
-            <span
-              className="px-3 py-1 rounded-lg text-xs font-semibold capitalize justify-self-start"
-              style={
-                p.role === 'manager'
-                  ? { background: 'var(--primary)', color: 'var(--primary-foreground)' }
-                  : { background: 'var(--muted)', color: 'var(--muted-foreground)' }
-              }
-            >
-              {p.role}
-            </span>
-
-            {/* Edit button */}
-            <button
-              onClick={() => onEdit(p)}
-              className="px-3 py-1 rounded-lg text-xs font-semibold"
-              style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}
-            >
-              Edit
-            </button>
-          </div>
-        ))}
-      </div>
+        {/* Desktop: table (hidden below md) */}
+        <CardContent className="hidden md:block px-0 py-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="px-5 text-xs tracking-widest uppercase" style={{ color: 'var(--muted-foreground)' }}>Name / Email</TableHead>
+                <TableHead className="px-5 text-xs tracking-widest uppercase" style={{ color: 'var(--muted-foreground)' }}>Joined</TableHead>
+                <TableHead className="px-5 text-xs tracking-widest uppercase" style={{ color: 'var(--muted-foreground)' }}>Role</TableHead>
+                <TableHead className="px-5" />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {profiles.map((p) => (
+                <TableRow key={p.id}>
+                  <TableCell className="px-5 py-4">
+                    <p className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>
+                      {p.name ?? '—'}
+                      {p.id === currentUserId && (
+                        <span className="ml-2 text-xs" style={{ color: 'var(--muted-foreground)' }}>you</span>
+                      )}
+                    </p>
+                    <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{p.email}</p>
+                  </TableCell>
+                  <TableCell className="px-5 py-4">
+                    <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>
+                      {formatDate(p.created_at)}
+                    </p>
+                  </TableCell>
+                  <TableCell className="px-5 py-4">
+                    <Badge variant={p.role === 'manager' ? 'default' : 'secondary'} className="capitalize">
+                      {p.role}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="px-5 py-4 text-right">
+                    <Button variant="outline" size="sm" onClick={() => onEdit(p)}>
+                      Edit
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -236,20 +261,18 @@ export function UsersTable({ profiles, currentUserId }: { profiles: Profile[]; c
   const router = useRouter()
   const [editing, setEditing] = useState<Profile | null>(null)
 
-  // Groups: managers first, then cashiers — each group sorted by join date (oldest first, from server)
   const managers = profiles.filter((p) => p.role === 'manager')
   const cashiers = profiles.filter((p) => p.role === 'cashier')
 
   return (
-    <div className="space-y-6">
-      {editing && (
-        <RoleModal
-          target={editing}
-          currentUserId={currentUserId}
-          onClose={() => setEditing(null)}
-          onSaved={() => { setEditing(null); router.refresh() }}
-        />
-      )}
+    <div className="flex flex-col gap-6">
+      <RoleDialog
+        target={editing}
+        currentUserId={currentUserId}
+        open={editing !== null}
+        onOpenChange={(open) => { if (!open) setEditing(null) }}
+        onSaved={() => { setEditing(null); router.refresh() }}
+      />
 
       <UserGroup label="Managers" profiles={managers} currentUserId={currentUserId} onEdit={setEditing} />
       <UserGroup label="Cashiers" profiles={cashiers} currentUserId={currentUserId} onEdit={setEditing} />
