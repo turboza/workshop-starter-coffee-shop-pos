@@ -34,15 +34,20 @@ src/
   lib/supabase.ts           — legacy plain client (still used nowhere new — prefer the two below)
   lib/supabase-server.ts    — session-aware client for server components (reads cookies via next/headers)
   lib/supabase-browser.ts   — session-aware client for client components (createBrowserClient from @supabase/ssr)
+  lib/utils.ts              — shadcn `cn()` helper (clsx + tailwind-merge)
+  lib/stockStatus.ts        — getStockStatus(count, par) → 'below' | 'approaching' | 'ok' (shared inventory thresholds)
   data/products.ts          — 30 products across 5 categories + upcharge tables (still in code, not DB)
   data/sampleOrders.ts      — kept as reference; no longer used by LiveFeed
   data/stats.ts             — sample stats; only Voids Today still uses this (everything else is real DB data)
   context/CartContext.tsx   — CartProvider + useCart() hook (useReducer)
   components/
-    ui/Badge.tsx            — new | void | live variants
+    ui/Badge.tsx            — project badge: new | void | live variants (NOT the shadcn one)
     ui/ProductPlaceholder.tsx — colored letter square, color derived from name hash
     ui/LogoutButton.tsx     — "Sign out" button; signs out via browser client, redirects to /login
     ui/AccountMenu.tsx      — circular avatar icon (top-right of Till); dropdown shows email + Sign out
+    ui/ManagerSidebar.tsx   — manager nav sidebar (offcanvas on mobile); subtle active state via --sidebar-active
+    inventory/InventoryView.tsx — CLIENT; stock table, inline adjust, stocktake dialog, history sheet (shadcn)
+    users/UsersTable.tsx    — CLIENT; managers/cashiers groups, role-change dialog
     till/CategoryTabs.tsx   — category pill tabs + search input
     till/ProductGrid.tsx    — 4-col (2-col mobile) product cards, SOLD OUT overlay
     till/CartPanel.tsx      — order items, qty controls, subtotal/VAT/total, Charge button
@@ -56,39 +61,44 @@ src/
     dashboard/LiveFeed.tsx  — order list with NEW/VOID badges; accepts `orders` prop
 app/
   layout.tsx                — root layout, CartProvider, Caveat + Geist fonts
-  globals.css               — CSS variables (see Design tokens below), Tailwind v4 import
+  globals.css               — oklch design tokens (single source of truth — see DESIGN.md), shadcn + Tailwind v4 imports
   page.tsx                  — Till screen (default route)
   payment/page.tsx          — Cash/Card selector, quick-cash buttons, change calc; saves to Supabase on confirm
   receipt/page.tsx          — Formatted receipt, 5s auto-return, Print/Email/SMS stubs
-  dashboard/page.tsx        — Server component (force-dynamic); fetches last 48h orders + 30 days of order_items in parallel; passes to DashboardLive and TopProducts
+  login/page.tsx            — Sign in / Sign up page (email + password, tab switcher)
+  (manager)/                — route group: shared manager layout (sidebar), NOT in the URL
+    layout.tsx              — SidebarProvider + ManagerSidebar + SidebarInset wrapper for all manager pages
+    dashboard/page.tsx      — at /dashboard. Server (force-dynamic); fetches last 48h orders + 30 days of order_items in parallel; passes to DashboardLive and TopProducts
+    inventory/page.tsx      — at /inventory. Server (force-dynamic); fetches ingredients + recent stock_adjustments; passes to InventoryView
+    users/page.tsx          — at /users. Lists users grouped by role; passes to UsersTable
 proxy.ts                    — route protection (replaces middleware.ts in Next.js 16); redirects
                               unauthenticated visitors to /login; redirects logged-in users away from /login
-app/
-  login/page.tsx            — Sign in / Sign up page (email + password, tab switcher)
+components/ui/              — shadcn primitives (base-nova): badge, button, card, dialog, input, separator,
+                              sheet, sidebar, skeleton, table, toggle, toggle-group, tooltip
 supabase/
   migrations/               — SQL migration files applied to cloud DB
+DESIGN.md                   — design guidelines: tokens, shadcn-first, color restraint, responsive (read before UI work)
 ```
 
-## Design tokens (globals.css)
+## Design
 
-```
---bg: #EEF4FB          background
---bg-subtle: #E2ECF8   hover/secondary bg
---card: #ffffff
---accent: #3B82F6      primary blue
---accent-dark: #1D4ED8
---accent-light: #DBEAFE
---text: #1E293B
---text-muted: #64748B
---text-faint: #94A3B8
---border: #CBD5E1
---border-light: #E2E8F0
---destructive: #991B1B
---success: #15803D
-```
+**Read [`DESIGN.md`](DESIGN.md) before adding or changing any UI.** It holds the design
+principles (token discipline, shadcn-first, color restraint, active≠hover, mobile-first).
 
-Always use `style={{ color: 'var(--text-muted)' }}` — do NOT add custom Tailwind color classes.
-Use `font-display` class for Caveat headings, `font-mono` for receipt text.
+Quick facts:
+- The theme is a **warm-orange shadcn** system (`base-nova` style, `base` primitives — not
+  radix). All design values are **oklch CSS variables** defined in
+  [`app/globals.css`](app/globals.css) — that file is the single source of truth for
+  values; never copy them here or into components.
+- Use the token classes Tailwind generates (`bg-primary`, `text-muted-foreground`,
+  `border-border`, …) or `style={{ color: 'var(--foreground)' }}` matching the surrounding
+  file. **No raw hex/oklch in components.** Need a new color? Add a token pair to both the
+  `:root` and `.dark` blocks in `globals.css`, don't inline it.
+- `font-display` (Caveat) for friendly headings, `font-mono` for receipt text.
+
+> Note: this section previously listed an old blue palette (`--bg`, `--accent: #3B82F6`,
+> `--text-muted`). Those tokens no longer exist — the app moved to the orange oklch theme
+> above. If you see those names anywhere, they're stale.
 
 ## Cart state
 
