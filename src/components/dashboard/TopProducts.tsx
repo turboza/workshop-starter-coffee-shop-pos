@@ -2,6 +2,14 @@
 
 import { useState } from 'react'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardAction,
+} from '@/components/ui/card'
 
 type Period = 'TODAY' | 'WEEK' | 'MONTH'
 type Item = { rank: number; name: string; count: number }
@@ -44,33 +52,31 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
   const maxCount = items[0]?.count ?? 1
 
   return (
-    <div
-      className="rounded-xl p-5"
-      style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
-    >
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-        <h3 className="font-bold text-xl" style={{ color: 'var(--foreground)' }}>
-          Top products
-        </h3>
-        <ToggleGroup
-          value={[period]}
-          onValueChange={(vals) => { if (vals.length > 0) setPeriod(vals[vals.length - 1] as Period) }}
-          variant="outline"
-          size="sm"
-          spacing={0}
-        >
-          <ToggleGroupItem value="TODAY">Today</ToggleGroupItem>
-          <ToggleGroupItem value="WEEK">Week</ToggleGroupItem>
-          <ToggleGroupItem value="MONTH">Month</ToggleGroupItem>
-        </ToggleGroup>
-      </div>
-
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-bold text-xl">Top products</CardTitle>
+        <CardDescription>Best sellers by units sold</CardDescription>
+        <CardAction>
+          <ToggleGroup
+            value={[period]}
+            onValueChange={(vals) => { if (vals.length > 0) setPeriod(vals[vals.length - 1] as Period) }}
+            variant="outline"
+            size="sm"
+            spacing={0}
+          >
+            <ToggleGroupItem value="TODAY">Today</ToggleGroupItem>
+            <ToggleGroupItem value="WEEK">Week</ToggleGroupItem>
+            <ToggleGroupItem value="MONTH">Month</ToggleGroupItem>
+          </ToggleGroup>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
       {items.length === 0 ? (
-        <p className="text-sm py-4 text-center" style={{ color: 'var(--muted-foreground)' }}>
+        <p className="text-sm py-4 text-center text-muted-foreground">
           No orders yet
         </p>
       ) : (
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
           {items.map((item) => (
             <div key={item.rank} className="flex items-center gap-3">
               <span className="text-sm w-4 shrink-0" style={{ color: 'var(--muted-foreground)' }}>
@@ -95,6 +101,7 @@ export function TopProducts({ rawItems }: { rawItems: RawItem[] }) {
           ))}
         </div>
       )}
-    </div>
+      </CardContent>
+    </Card>
   )
 }

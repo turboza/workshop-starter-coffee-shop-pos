@@ -1,4 +1,5 @@
 import { TopProducts } from '@/src/components/dashboard/TopProducts'
+import { SalesMix } from '@/src/components/dashboard/SalesMix'
 import { LiveFeed } from '@/src/components/dashboard/LiveFeed'
 import { DashboardLive } from '@/src/components/dashboard/DashboardLive'
 import { createSupabaseServerClient } from '@/src/lib/supabase-server'
@@ -107,7 +108,10 @@ export async function DashboardData() {
   return (
     <>
       <DashboardLive rawOrders={rawOrders} />
-      <TopProducts rawItems={rawItems} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <TopProducts rawItems={rawItems} />
+        <SalesMix rawItems={rawItems} />
+      </div>
       <LiveFeed orders={orders} />
     </>
   )

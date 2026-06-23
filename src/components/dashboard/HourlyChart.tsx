@@ -1,6 +1,29 @@
 'use client'
 
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardAction,
+} from '@/components/ui/card'
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from '@/components/ui/chart'
+
 type RawOrder = { total: number; createdAt: string }
+
+const chartConfig = {
+  revenue: {
+    label: 'Revenue',
+    color: 'var(--chart-2)',
+  },
+} satisfies ChartConfig
 
 export function HourlyChart({ orders }: { orders: RawOrder[] }) {
   // Bucket by local hour using the browser's timezone
@@ -12,53 +35,66 @@ export function HourlyChart({ orders }: { orders: RawOrder[] }) {
       hourlyMap.set(hour, (hourlyMap.get(hour) ?? 0) + order.total)
     }
   }
-  const hourlyRevenue = Array.from(hourlyMap, ([hour, revenue]) => ({ hour, revenue }))
-  const max = Math.max(...hourlyRevenue.map((h) => h.revenue), 1)
+  const data = Array.from(hourlyMap, ([hour, revenue]) => ({
+    hour,
+    label: `${String(hour).padStart(2, '0')}:00`,
+    revenue,
+  }))
 
   return (
-    <div
-      className="rounded-xl p-5"
-      style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
-    >
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-xl" style={{ color: 'var(--foreground)' }}>
-          Hourly revenue
-        </h3>
-        <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
-          07:00–20:00
-        </span>
-      </div>
-
-      <div className="flex items-end gap-1 h-24">
-        {hourlyRevenue.map((h) => {
-          const heightPct = (h.revenue / max) * 100
-          const intensity = h.revenue / max
-          return (
-            <div key={h.hour} className="flex flex-col items-center flex-1 min-w-0 gap-1">
-              <div className="flex flex-col justify-end w-full" style={{ height: '80px' }}>
-                <div
-                  className="w-full rounded-sm flex items-end justify-center relative group"
-                  style={{
-                    height: `${heightPct}%`,
-                    background: `oklch(${0.6716 + intensity * 0.05} ${0.1368 * (0.4 + intensity * 0.6)} 48.513)`,
-                    minHeight: '4px',
-                  }}
-                >
-                  <div
-                    className="absolute -top-7 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                    style={{ background: 'var(--foreground)', color: 'var(--background)', zIndex: 10 }}
-                  >
-                    ฿{h.revenue}
-                  </div>
-                </div>
-              </div>
-              <span className="text-xs" style={{ color: 'var(--muted-foreground)', fontSize: '10px' }}>
-                {h.hour}
-              </span>
-            </div>
-          )
-        })}
-      </div>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-bold text-xl">Hourly revenue</CardTitle>
+        <CardDescription>Today, by the hour</CardDescription>
+        <CardAction>
+          <span className="text-xs text-muted-foreground">07:00–20:00</span>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig} className="h-40 w-full">
+          <BarChart data={data} accessibilityLayer margin={{ left: -16, right: 0, top: 4 }}>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="hour"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              interval={0}
+              tickFormatter={(h) => String(h)}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={4}
+              width={48}
+              tickFormatter={(v) => `฿${v}`}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  labelKey="label"
+                  formatter={(value, name, item) => (
+                    <div className="flex flex-1 items-center justify-between gap-3">
+                      <span className="flex items-center gap-1.5 text-muted-foreground">
+                        <span
+                          className="size-2.5 shrink-0 rounded-[2px]"
+                          style={{ background: 'var(--color-revenue)' }}
+                        />
+                        {item?.payload?.label}
+                      </span>
+                      <span className="font-mono font-medium tabular-nums text-foreground">
+                        ฿{Number(value).toLocaleString()}
+                      </span>
+                    </div>
+                  )}
+                />
+              }
+            />
+            <Bar dataKey="revenue" fill="var(--color-revenue)" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   )
 }
