@@ -39,38 +39,56 @@ export default async function UsersPage() {
           <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>manager</p>
         </div>
 
-        <nav className="flex-1">
-          <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>
-            Operate
-          </p>
-          <ul className="space-y-1">
-            <li>
-              <Link
-                href="/dashboard"
-                className="flex items-center px-3 py-2 rounded-lg text-sm"
-                style={{ color: 'var(--muted-foreground)' }}
-              >
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <span
-                className="flex items-center px-3 py-2 rounded-lg text-sm font-semibold"
-                style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
-              >
-                Users &amp; roles
-              </span>
-            </li>
-            <li>
-              <Link
-                href="/"
-                className="flex items-center px-3 py-2 rounded-lg text-sm"
-                style={{ color: 'var(--muted-foreground)' }}
-              >
-                ← Back to till
-              </Link>
-            </li>
-          </ul>
+        <nav className="flex-1 space-y-4">
+          <div>
+            <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>
+              Operate
+            </p>
+            <ul className="space-y-1">
+              <li>
+                <Link
+                  href="/dashboard"
+                  className="flex items-center px-3 py-2 rounded-lg text-sm"
+                  style={{ color: 'var(--muted-foreground)' }}
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <span
+                  className="flex items-center px-3 py-2 rounded-lg text-sm font-semibold"
+                  style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
+                >
+                  Users &amp; roles
+                </span>
+              </li>
+              <li>
+                <Link
+                  href="/"
+                  className="flex items-center px-3 py-2 rounded-lg text-sm"
+                  style={{ color: 'var(--muted-foreground)' }}
+                >
+                  ← Back to till
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-xs font-semibold tracking-widest uppercase mb-2" style={{ color: 'var(--muted-foreground)' }}>
+              Catalog
+            </p>
+            <ul className="space-y-1">
+              <li>
+                <Link
+                  href="/inventory"
+                  className="flex items-center px-3 py-2 rounded-lg text-sm"
+                  style={{ color: 'var(--muted-foreground)' }}
+                >
+                  Inventory
+                </Link>
+              </li>
+            </ul>
+          </div>
         </nav>
 
         <LogoutButton />

@@ -1,5 +1,26 @@
 export type Category = 'Coffee' | 'Tea' | 'Pastry' | 'Cold drinks' | 'Specials'
 
+export type StockStatus = 'below' | 'approaching' | 'ok'
+
+export interface Ingredient {
+  id: string
+  name: string
+  unit: string
+  count: number  // human units (count_h / 100)
+  par: number    // human units (par_h / 100)
+}
+
+export interface StockAdjustment {
+  id: string
+  ingredientId: string
+  previous: number
+  next: number
+  delta: number
+  reason: string
+  cashier: string
+  timestamp: string
+}
+
 export type MilkOption = 'Whole' | 'Skim' | 'Oat' | 'Soy' | 'Almond'
 export type SizeOption = 'S 12oz' | 'M 16oz' | 'L 20oz'
 export type ExtraOption = 'Extra shot' | 'Decaf' | 'Less sugar' | 'No foam'
